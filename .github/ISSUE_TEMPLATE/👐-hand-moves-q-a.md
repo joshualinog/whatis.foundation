@@ -1,7 +1,7 @@
 ---
-name: HAND MOVES Q&A
+name: "\U0001F450 HAND MOVES Q&A"
 about: This template will set up hand moves question and answer
-title: HAND MOVES Q&A
+title: 'HAND MOVES Q&A # '
 labels: "\U0001F450 hand moves"
 assignees: ''
 
