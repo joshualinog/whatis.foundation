@@ -7,13 +7,13 @@ assignees: ''
 
 ---
 
-#QUESTION
+# QUESTION
 > q:
 
 ## 👋 question hand move
 
 
-#ANSWER
->a:
+# ANSWER
+> a:
 
 ## 👋 answer hand move
