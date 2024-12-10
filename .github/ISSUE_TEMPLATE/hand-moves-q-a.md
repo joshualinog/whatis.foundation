@@ -10,10 +10,10 @@ assignees: ''
 #QUESTION
 > q:
 
-##question hand move
+## 👋 question hand move
 
 
 #ANSWER
 >a:
 
-##answer hand move
+## 👋 answer hand move
