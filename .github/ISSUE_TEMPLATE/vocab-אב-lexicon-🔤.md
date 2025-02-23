@@ -12,3 +12,7 @@ assignees: joshualinog
 ## BLOCK TALK DEFINITION
 
 ### original Hebrew/Greek word (s)  - [ ]
+
+### translation background notes
+
+### scripture passages
