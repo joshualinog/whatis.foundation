@@ -13,6 +13,8 @@ assignees: joshualinog
 
 ### original Hebrew/Greek word (s)  - [ ]
 
-### translation background notes
+### TRANSLATION BACKGROUND NOTES
 
-### scripture passages
+### SCRIPTURE PASSAGES
+
+### QUESTIONS
