@@ -3,50 +3,85 @@ layout: layout.njk
 title: "whatis.foundation"
 ---
 
-<section class="mx-auto max-w-5xl px-6 py-16 sm:px-8 lg:px-12">
+<section class="mx-auto max-w-7xl px-6 py-16 sm:px-8 lg:px-12">
   <div class="space-y-6 text-center">
-    <p class="text-sm uppercase tracking-[0.35em] text-brand-600">Sacred learning path</p>
+    <p class="text-sm uppercase tracking-[0.35em] text-brand-600">A Sacred Educational Course</p>
     <h1 class="text-4xl font-semibold tracking-tight text-slate-900 sm:text-5xl">whatis.foundation</h1>
-    <p class="mx-auto max-w-2xl text-lg leading-8 text-slate-700">
-      A sacred educational course with five transformational parts across 99 meetings. Each part offers a guided container for inner practice, shared learning, and the unfolding of a deeper invitation.
+    <p class="mx-auto max-w-3xl text-lg leading-8 text-slate-700">
+      A 99-meeting course built on a parable of light, the prism, the tablets, and the rainbow staircase. The path moves from foundational elements into deep training and finally to ministerial initiation.
     </p>
   </div>
 
-  <div class="mt-14 grid gap-6 lg:grid-cols-2">
+  <div class="mt-12 grid gap-6 lg:grid-cols-3">
     <article class="rounded-3xl border border-slate-200 bg-white p-8 shadow-soft">
-      <p class="text-sm font-medium text-brand-600">Course structure</p>
-      <h2 class="mt-3 text-2xl font-semibold text-slate-900">99 meetings in five parts</h2>
-      <p class="mt-4 text-slate-600">This journey is divided into five parts, each with a specific focus and rhythm. Together they form an integrated curriculum for embodiment, inquiry, devotion, and community.</p>
+      <p class="text-sm uppercase tracking-[0.3em] text-brand-600">Course outline</p>
+      <h2 class="mt-3 text-2xl font-semibold text-slate-900">Begin with the beginning elements</h2>
+      <p class="mt-4 text-slate-600">The first 22 meetings are the heaviest and most foundational. They train the learner in the identity of God, the prism, the ten words, and the staircase of light.</p>
     </article>
 
-    <section class="space-y-4">
-      {% for part in parts %}
-      <a href="#part-{{ part.id }}" class="block rounded-3xl border border-slate-200 bg-slate-50 p-6 transition hover:border-brand-300 hover:bg-white">
-        <div class="flex items-center justify-between gap-4">
-          <div>
-            <p class="text-sm font-semibold uppercase tracking-[0.3em] text-slate-500">Part {{ part.id }}</p>
-            <h3 class="mt-2 text-xl font-semibold text-slate-900">{{ part.title }}</h3>
-          </div>
-          <span class="rounded-full bg-brand-100 px-4 py-2 text-sm font-semibold text-brand-700">{{ part.meetings }} meetings</span>
-        </div>
-        <p class="mt-4 text-slate-600">{{ part.description }}</p>
-      </a>
-      {% endfor %}
-    </section>
+    <article class="rounded-3xl border border-slate-200 bg-white p-8 shadow-soft">
+      <p class="text-sm uppercase tracking-[0.3em] text-brand-600">Main training</p>
+      <h2 class="mt-3 text-2xl font-semibold text-slate-900">Seventy meetings of practice</h2>
+      <p class="mt-4 text-slate-600">The main cycle explores each of the ten words through the seven spaces, supporting deep discernment, practical formation, and the ability to distinguish good and evil.</p>
+    </article>
+
+    <article class="rounded-3xl border border-slate-200 bg-white p-8 shadow-soft">
+      <p class="text-sm uppercase tracking-[0.3em] text-brand-600">Leadership</p>
+      <h2 class="mt-3 text-2xl font-semibold text-slate-900">Seven meetings of initiation</h2>
+      <p class="mt-4 text-slate-600">The final seven meetings focus on becoming light, priesthood, and APESI leadership maturity, preparing learners to instruct and serve.</p>
+    </article>
   </div>
 
-  <div class="mt-16 space-y-8">
-    {% for part in parts %}
-    <section id="part-{{ part.id }}" class="rounded-3xl border border-slate-200 bg-white p-8 shadow-soft">
-      <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <p class="text-sm font-semibold uppercase tracking-[0.3em] text-brand-600">Part {{ part.id }}</p>
-          <h2 class="mt-2 text-2xl font-semibold text-slate-900">{{ part.title }}</h2>
-        </div>
-        <p class="rounded-full bg-slate-100 px-4 py-2 text-sm font-medium text-slate-700">{{ part.meetings }} meetings</p>
+  <section class="mt-16 rounded-3xl border border-slate-200 bg-white p-8 shadow-soft">
+    <div class="grid gap-8 lg:grid-cols-2 lg:items-start">
+      <div>
+        <p class="text-sm uppercase tracking-[0.3em] text-brand-600">The course story</p>
+        <h2 class="mt-3 text-3xl font-semibold text-slate-900">A parable of light, the prism, and ascent</h2>
+        <p class="mt-4 text-slate-600">The course is rooted in Ezekiel 1 and Hebrews 5–6, focusing on the person of God as light, Moses as prophet-priest, and Yeshuah as the glory of creation. It is designed to support formation through scripture, practice, and a living teaching tradition.</p>
       </div>
-      <p class="mt-5 text-slate-600">{{ part.longDescription }}</p>
-    </section>
-    {% endfor %}
-  </div>
+      <div class="rounded-3xl bg-slate-50 p-6">
+        <h3 class="text-xl font-semibold text-slate-900">Course phases</h3>
+        <ul class="mt-4 space-y-3 text-slate-600">
+          <li><strong>Meetings 1–22:</strong> Beginning Elements</li>
+          <li><strong>Meetings 23–92:</strong> Main Training</li>
+          <li><strong>Meetings 93–99:</strong> Ministerial Initiation</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  {% for section in course.sections %}
+  <section id="{{ section.id }}" class="mt-16">
+    <div class="mb-8 rounded-3xl border border-slate-200 bg-white p-8 shadow-soft">
+      <div class="sm:flex sm:items-start sm:justify-between sm:gap-8">
+        <div>
+          <p class="text-sm uppercase tracking-[0.3em] text-brand-600">{{ section.subtitle }}</p>
+          <h2 class="mt-3 text-3xl font-semibold text-slate-900">{{ section.title }}</h2>
+        </div>
+        <p class="mt-5 max-w-xl text-slate-600 sm:mt-0">{{ section.overview }}</p>
+      </div>
+    </div>
+
+    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+      {% for meeting in section.meetings %}
+      <article id="{{ meeting.anchor }}" class="group overflow-hidden rounded-3xl border border-slate-200 bg-slate-50 transition hover:-translate-y-1 hover:shadow-soft">
+        <div class="h-44 bg-gradient-to-br from-brand-600 to-brand-800 p-6 text-white flex items-end">
+          <div>
+            <p class="text-sm uppercase tracking-[0.35em] text-brand-200">Meeting {{ meeting.number }}</p>
+            <h3 class="mt-2 text-2xl font-semibold">{{ meeting.title }}</h3>
+          </div>
+        </div>
+        <div class="space-y-4 p-6">
+          <p class="text-sm font-semibold uppercase tracking-[0.25em] text-slate-500">Brief</p>
+          <p class="text-sm text-slate-700">{{ meeting.description }}</p>
+          <p class="text-sm leading-6 text-slate-600">{{ meeting.details }}</p>
+          <div class="pt-4">
+            <a href="#{{ meeting.anchor }}" class="inline-flex items-center justify-center rounded-full bg-brand-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-brand-700">Open meeting</a>
+          </div>
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+  </section>
+  {% endfor %}
 </section>
