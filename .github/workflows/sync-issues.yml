@@ -1,0 +1,86 @@
+name: Sync Issues to Data
+
+permissions:
+  contents: write
+
+on:
+  schedule:
+    - cron: '0 2 * * *'
+  workflow_dispatch: {}
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GH_PAT }}
+          persist-credentials: true
+          fetch-depth: 0
+
+      - name: Ensure gh is available
+        run: gh --version || true
+
+      - name: Run sync script
+        run: |
+          node ./scripts/sync-issues.js
+
+      - name: Commit generated posts
+        env:
+          PAT: ${{ secrets.GH_PAT }}
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git add src/data/posts || true
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
+
+          git commit -m "chore: sync contentPost issues to src/data/posts"
+          git remote set-url origin https://x-access-token:${PAT}@github.com/${{ github.repository }}.git
+
+          git fetch --no-tags --prune origin $DEFAULT_BRANCH
+          FALLBACK=0
+          if ! git rebase origin/$DEFAULT_BRANCH; then
+            echo "Rebase conflict or failure; falling back to sync branch"
+            git rebase --abort || true
+            FALLBACK=1
+          fi
+
+          if [ "$FALLBACK" -eq 0 ]; then
+            attempts=0
+            max_attempts=3
+            until git push origin "HEAD:${DEFAULT_BRANCH}"; do
+              attempts=$((attempts+1))
+              if [ $attempts -ge $max_attempts ]; then
+                echo "Push failed after $attempts attempts; will fallback to sync branch"
+                FALLBACK=1
+                break
+              fi
+              echo "Push rejected, fetching and rebasing (attempt $attempts)..."
+              git fetch origin $DEFAULT_BRANCH
+              if ! git rebase origin/$DEFAULT_BRANCH; then
+                echo "Rebase failed during retry; aborting and falling back"
+                git rebase --abort || true
+                FALLBACK=1
+                break
+              fi
+            done
+          fi
+
+          if [ "$FALLBACK" -eq 1 ]; then
+            BRANCH_NAME="sync/scheduled-$(date +%s)"
+            git checkout -b "$BRANCH_NAME"
+            git push --set-upstream origin "$BRANCH_NAME"
+            echo "SYNC_BRANCH=$BRANCH_NAME" >> $GITHUB_ENV
+            echo "SYNC_COMMIT=$(git rev-parse HEAD)" >> $GITHUB_ENV
+          else
+            echo "Direct push to ${DEFAULT_BRANCH} succeeded"
+          fi
