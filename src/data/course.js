@@ -155,8 +155,8 @@ const course = {
       id: 'part-4',
       number: 4,
       title: 'The Rainbow',
-      subtitle: 'Meetings 19–22',
-      overview: 'Part four reveals the rainbow as a staircase of light. The seven spaces and the temple pattern emerge, establishing the structure for the seventy meetings of main training.',
+      subtitle: 'Meetings 19–92',
+      overview: 'Part four reveals the rainbow as a staircase of light. The seven spaces and the temple pattern emerge, establishing the structure for the seventy meetings of main training through meeting 92.',
       color: 'from-emerald-500 to-teal-700',
       labelColor: 'text-emerald-200',
       meetings: [
@@ -184,18 +184,6 @@ const course = {
           description: 'Complete the rainbow sequence.',
           details: 'Anchor the beginning elements and the temple pattern in preparation for the seventy meetings of training.',
         },
-      ],
-    },
-
-    {
-      id: 'part-5',
-      number: 5,
-      title: 'Main Training & We Become Light',
-      subtitle: 'Meetings 23–99',
-      overview: 'Part five contains seventy meetings of main training — each of the ten words explored through the seven spaces — followed by seven meetings of ministerial initiation in which participants become light, enter priesthood, and are equipped for APESI ministry.',
-      color: 'from-rose-500 to-pink-700',
-      labelColor: 'text-rose-200',
-      meetings: [
         ...Array.from({ length: 70 }, (_, i) => {
           const n = 23 + i;
           const word = Math.ceil((i + 1) / 7);
@@ -207,13 +195,23 @@ const course = {
             details: 'Each meeting includes 30 minutes of instruction, 15 minutes of question and discussion, and 15 minutes of practice. Scripture passages anchor each session.',
           };
         }),
-        ...Array.from({ length: 7 }, (_, i) => ({
-          number: 93 + i,
-          title: `We become light ${i + 1}`,
-          description: 'A session of ministerial initiation and leadership formation.',
-          details: 'These closing sessions declare readiness for ministry: priesthood, APESI leadership (Apostle, Prophet, Evangelist, Shepherd, Instructor), and the capacity to instruct and serve.',
-        })),
       ],
+    },
+
+    {
+      id: 'part-5',
+      number: 5,
+      title: 'We Become Light',
+      subtitle: 'Meetings 93–99',
+      overview: 'Part five contains seven meetings of ministerial initiation in which participants become light, enter priesthood, and are equipped for APESI ministry.',
+      color: 'from-rose-500 to-pink-700',
+      labelColor: 'text-rose-200',
+      meetings: Array.from({ length: 7 }, (_, i) => ({
+        number: 93 + i,
+        title: `We become light ${i + 1}`,
+        description: 'A session of ministerial initiation and leadership formation.',
+        details: 'These closing sessions declare readiness for ministry: priesthood, APESI leadership (Apostle, Prophet, Evangelist, Shepherd, Instructor), and the capacity to instruct and serve.',
+      })),
     },
   ],
 };
