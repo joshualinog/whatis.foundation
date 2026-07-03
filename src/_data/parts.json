@@ -1,0 +1,37 @@
+[
+  {
+    "id": 1,
+    "title": "Foundations of Presence",
+    "meetings": 19,
+    "description": "Begin the course by establishing presence, resonance, and the first practices of attention.",
+    "longDescription": "Part 1 introduces the container, practices, and core frameworks that support a living inquiry. It is designed to orient participants to sacred study through embodied presence and clarity."
+  },
+  {
+    "id": 2,
+    "title": "Healing the Field",
+    "meetings": 20,
+    "description": "Deepen inner healing, relational awareness, and the alchemy of heart-based practice.",
+    "longDescription": "Part 2 attends to healing, lineage, and the subtle field of experience so that presence can arise from a place of safety, care, and devotion."
+  },
+  {
+    "id": 3,
+    "title": "Embodied Wisdom",
+    "meetings": 20,
+    "description": "Enter the embodied thread of wisdom through practice, dialogue, and creative exploration.",
+    "longDescription": "Part 3 supports integration of insight into daily life, presence in action, and the cultivation of wisdom that is alive in the body."
+  },
+  {
+    "id": 4,
+    "title": "Initiation of Knowing",
+    "meetings": 20,
+    "description": "Open into deep inquiry, initiation, and the unfolding of a more intimate relationship with truth.",
+    "longDescription": "Part 4 offers a journey into direct knowing, initiation, and the subtle invitations that arise as the course matures."
+  },
+  {
+    "id": 5,
+    "title": "Integration & Service",
+    "meetings": 20,
+    "description": "Bring the course into expression, service, and a grounded commitment to ongoing practice.",
+    "longDescription": "Part 5 holds the integration of the 99 meetings and the opening of service, community, and the living expression of the teaching."
+  }
+]
