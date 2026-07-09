@@ -65,43 +65,37 @@ const course = {
       id: 'part-2',
       number: 2,
       title: 'The Prism',
-      subtitle: 'Meetings 8–13',
-      overview: 'Part two introduces the prism — God\'s tool for travel. The five Ws provide the lexicon needed to understand the ten words and to move through the course with clarity and discernment.',
+      subtitle: 'Meetings 8–12',
+      overview: "Part two introduces the prism — God's tool for travel. The five Ws provide the lexicon needed to understand the ten words and to move through the course with clarity and discernment.",
       color: 'from-violet-500 to-purple-700',
       labelColor: 'text-violet-200',
       meetings: [
         {
           number: 8,
-          title: 'THE PRISM — God\'s tool for travel (introducing the 5 W\'s)',
-          description: 'The prism is the tool God gave us for the journey.',
-          details: "Introduce the five W's as the structural framework for understanding the ten words and for navigating the course.",
-        },
-        {
-          number: 9,
-          title: 'Prism 1 — Who (the 5 Ws)',
+          title: 'Prism 1 — Who',
           description: 'The first W: Who.',
           details: 'Identify the key persons, subjects, and agents in the course story and in the sacred narrative.',
         },
         {
-          number: 10,
+          number: 9,
           title: 'Prism 2 — What',
           description: 'The second W: What.',
           details: 'Clarify the forms, objects, and content of the sacred teaching.',
         },
         {
-          number: 11,
+          number: 10,
           title: 'Prism 3 — Where',
           description: 'The third W: Where.',
           details: 'Explore the spaces, places, and settings of the course journey.',
         },
         {
-          number: 12,
+          number: 11,
           title: 'Prism 4 — When',
           description: 'The fourth W: When.',
           details: 'Consider timing, sequence, and the rhythm of sacred movement.',
         },
         {
-          number: 13,
+          number: 12,
           title: 'Prism 5 — Why',
           description: 'The fifth W: Why.',
           details: 'Examine the purpose, intention, and direction of the sacred journey. Why completes the prism and opens the door to the tablets.',
@@ -113,70 +107,68 @@ const course = {
       id: 'part-3',
       number: 3,
       title: 'The Tablets',
-      subtitle: 'Meetings 14–17',
-      overview: 'Part three introduces the two tablets — the prism God gave us. The ten words form the skeletal framework for all of the main training ahead.',
+      subtitle: 'Meetings 13–22',
+      overview: 'Part three introduces the two tablets — the prism God gave us. The ten words form the skeletal framework for all of the main training ahead. Familiarize and memorize each beginning element before fitting them together in the main training.',
       color: 'from-sky-500 to-blue-700',
       labelColor: 'text-sky-200',
-      meetings: [
-        {
-          number: 14,
-          title: 'THE TABLETS — the 10 words, the prism God gave us',
-          description: 'Introduce the two tablets as the ten words.',
-          details: 'The tablets are the prism God gave us. The ten words structure all of the main training that follows.',
-        },
-        {
-          number: 15,
-          title: 'Tablet 1 — Heaven',
-          description: 'The first tablet explores Heaven.',
-          details: 'Consider the first tablet and its words in the context of divine reality and the heavenly dimension.',
-        },
-        {
-          number: 16,
-          title: 'Tablet 2 — Earth',
-          description: 'The second tablet explores Earth.',
-          details: 'Reflect on the second tablet and its words as they are grounded in creation and earthly life.',
-        },
-        {
-          number: 17,
-          title: 'Ashreis?',
-          description: 'A session on the emerging pattern of the tablets.',
-          details: 'Explore the meaning and shape of the tablet pattern as the beginning elements reach completion.',
-        },
-      ],
+      meetings: Array.from({ length: 10 }, (_, i) => ({
+        number: 13 + i,
+        title: `2 Tablets — Word ${i + 1}`,
+        description: `The two tablets: Word ${i + 1}.`,
+        details: 'Explore this word of the two tablets through the prism. Familiarize and memorize this beginning element before fitting it together in the main training.',
+      })),
     },
 
     {
       id: 'part-4',
       number: 4,
       title: 'The Rainbow',
-      subtitle: 'Meetings 18–21',
-      overview: 'Part four reveals the rainbow as a staircase of light. The seven spaces and the temple pattern emerge, establishing the structure for the main training journey ahead.',
+      subtitle: 'Meetings 23–29',
+      overview: 'Part four reveals the rainbow as a staircase of light. The seven spaces descend from violet to red, mapping conscience, mind, heart, gut, members, people, and earth onto their corresponding spaces in the temple.',
       color: 'from-emerald-500 to-teal-700',
       labelColor: 'text-emerald-200',
       meetings: [
         {
-          number: 18,
-          title: 'THE RAINBOW — TENT & TEMPLE — THE HOUSE OF GOD',
-          description: 'The rainbow as tent, temple, and house of God.',
-          details: 'The sacred space of the tent and temple mirror the rainbow staircase. We are invited into the house of God.',
+          number: 23,
+          title: 'The Rainbow — Space 7 — Violet | Conscience | Ark',
+          description: 'The highest space: conscience, mapped to the Ark.',
+          details: 'Violet light. The innermost dimension of the human being — conscience — corresponds to the Ark of the Covenant, the dwelling place of God.',
         },
         {
-          number: 19,
-          title: 'RAINBOW MODELS',
-          description: 'Explore rainbow models.',
-          details: 'The rainbow is examined as a structure of spaces, orbits, and rotations that support the main training cycle.',
+          number: 24,
+          title: 'The Rainbow — Space 6 — Indigo | Mind | Holy of Holies',
+          description: 'Space 6: mind, mapped to the Holy of Holies.',
+          details: 'Indigo light. The mind as the gate of the innermost sanctuary. The Holy of Holies is the space where the mind meets the divine.',
         },
         {
-          number: 20,
-          title: 'Rainbow subdivisions: spaces, orbits, and turns/rotations',
-          description: 'Define the rainbow subdivisions for the course journey.',
-          details: 'Map the seven spaces, their orbits, and the rotational movement that organizes the training across the ten words.',
+          number: 25,
+          title: 'The Rainbow — Space 5 — Blue | Heart | Holy Place',
+          description: 'Space 5: heart, mapped to the Holy Place.',
+          details: 'Blue light. The heart as the meeting place of God and humanity. The Holy Place holds the lampstand, the bread, and the altar of incense.',
         },
         {
-          number: 21,
-          title: 'MORE RAINBOW',
-          description: 'Continue the rainbow exploration.',
-          details: 'Solidify the rainbow staircase pattern in preparation for the main course training.',
+          number: 26,
+          title: 'The Rainbow — Space 4 — Green | Gut | Courtyard',
+          description: 'Space 4: gut, mapped to the Courtyard.',
+          details: 'Green light. The gut as the seat of instinct and vitality, corresponding to the outer courtyard where offering and washing occur.',
+        },
+        {
+          number: 27,
+          title: 'The Rainbow — Space 3 — Yellow | Members | Levitical Barrier',
+          description: 'Space 3: members, mapped to the Levitical Barrier.',
+          details: 'Yellow light. The members — hands, feet, voice — as the active expression of the inner life, bounded by the Levitical zone of service.',
+        },
+        {
+          number: 28,
+          title: 'The Rainbow — Space 2 — Orange | People | Tents of Israel',
+          description: 'Space 2: people, mapped to the Tents of Israel.',
+          details: 'Orange light. The relational and communal dimension, corresponding to the encampment of the tribes around the tabernacle.',
+        },
+        {
+          number: 29,
+          title: 'The Rainbow — Space 1 — Red | Earth | The Land of Israel',
+          description: 'Space 1: earth, mapped to the Land of Israel.',
+          details: 'Red light. The outermost space — the physical world, the land, the ground of all being — is the foundation from which we ascend.',
         },
       ],
     },
@@ -185,37 +177,28 @@ const course = {
       id: 'part-5',
       number: 5,
       title: 'We Become Light',
-      subtitle: 'Meetings 22–99',
-      overview: 'Part five contains the main training course: one introduction session, seventy meetings exploring the ten words through the seven spaces, and seven closing training sessions for becoming a trainer, instructor, and discipler.',
+      subtitle: 'Meetings 30–99',
+      overview: 'Part five is the main training: seventy meetings exploring the ten words through each of the seven spaces. Word by word, space by space, we climb the rainbow staircase and become light.',
       color: 'from-rose-500 to-pink-700',
       labelColor: 'text-rose-200',
-      meetings: [
-        {
-          number: 22,
-          title: 'MAIN COURSE: INTRODUCTION TO TRAINING - EXAMINING THE TEN WORDS THROUGH EACH OF THE SEVEN SPACES',
-          description: 'Introductory session for the main training course.',
-          details: 'This meeting sets the stage for the seventy meetings that explore the ten words through the seven spaces.',
-        },
-        ...Array.from({ length: 70 }, (_, i) => {
-          const n = 23 + i;
-          const word = Math.ceil((i + 1) / 7);
-          const space = 7 - (i % 7);
-          return {
-            number: n,
-            title: `W${word}S${space} - Word ${word} Space ${space}`,
-            description: `Explore word ${word} through space ${space}.`,
-            details: 'Each meeting includes 30 minutes of instruction, 15 minutes of question and discussion, and 15 minutes of practice. Scripture passages anchor each session.',
-          };
-        }),
-        ...Array.from({ length: 7 }, (_, i) => ({
-          number: 93 + i,
-          title: `BEING THE LIGHT TO OTHERS | BUILDING ON OUR FOUNDATION | TRAINING AND DISCIPLING OTHERS ${i + 1}`,
-          description: 'A session for becoming a trainer, instructor, and discipler.',
-          details: 'These closing sessions focus on leading others, building on the foundation, and stepping into training and discipleship roles.',
-        })),
-      ],
+      meetings: Array.from({ length: 70 }, (_, i) => {
+        const n = 30 + i;
+        const word = Math.floor(i / 7) + 1;
+        const space = 7 - (i % 7);
+        return {
+          number: n,
+          title: `W${word}S${space} — Word ${word} Space ${space}`,
+          description: `Explore word ${word} through space ${space}.`,
+          details: 'Each meeting includes 30 minutes of instruction, 15 minutes of question and discussion, and 15 minutes of practice. Scripture passages anchor each session.',
+        };
+      }),
     },
   ],
+
+  outro: {
+    title: 'Baptism & Laying on of Hands',
+    description: 'Declare mature. Become an instructor. Being the light to others. Building on our foundation. Training and discipling others.',
+  },
 };
 
 module.exports = course;
