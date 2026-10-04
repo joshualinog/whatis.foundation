@@ -11,7 +11,7 @@ const assert = require('assert');
 const fs = require('fs');
 const path = require('path');
 const { DOC_TYPES, formatZodError } = require('./lib/schema');
-const { buildTemplate } = require('./lib/base-template');
+const { buildTemplate, buildTitleOnly } = require('./lib/base-template');
 const { parseIssue } = require('./lib/issue-doc');
 const { parseDocText } = require('./lib/tag-parser');
 const titles = require('../src/data/base-titles.json');
@@ -49,6 +49,16 @@ titles.forEach(t => check(`title round trip for base ${t.number}`, () => {
   const { doc, errors } = parse(`Base ${t.number}`, buildTemplate('base', { number: t.number, title: t.title }), 'FOUNDATION BASE');
   assert(doc, errors.join('; '));
   assert.strictEqual(doc.title, t.title.replace(/\s+/g, ' ').trim());
+}));
+
+// the compact form written into every base issue: just the full title
+titles.forEach(t => check(`compact title for base ${t.number}`, () => {
+  const body = buildTitleOnly(t.title);
+  assert(/^<!-- meta:base title="[^\n]*"--><!--\/meta:base-->$/.test(body), 'unexpected shape');
+  const { doc, errors } = parse(`Base ${t.number}`, body, 'FOUNDATION BASE');
+  assert(doc, errors.join('; '));
+  assert.strictEqual(doc.title, t.title.replace(/\s+/g, ' ').trim());
+  assert.strictEqual(doc.number, t.number);
 }));
 
 // 2. parser behaviour

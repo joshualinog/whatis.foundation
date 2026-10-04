@@ -41,7 +41,7 @@ Freeform handwriting goes here, as markdown.
 <!-- /meta:part -->
 ```
 
-**Pass 1 — tags.** `meta:TYPE` sets scalar fields; `block:<field>` holds items for an array field; an `item:<alias>` is one entry. Inside a known block the alias is free (`item:game`, `item:activity`, `item:content` are all the same). Attribute values go in quotes; lists are comma separated; `essential` / `main_image` / `main_video` can be written bare. The text between an item's open and close tags is its body. To put `"`, `<` or `>` inside a value (a literal `-->` would end the tag) write `&quot;`, `&lt;` or `&gt;`.
+**Pass 1 — tags.** `meta:TYPE` sets scalar fields; `block:<field>` holds items for an array field; an `item:<alias>` is one entry. Inside a known block the alias is free (`item:game`, `item:activity`, `item:content` are all the same). Attribute values go in quotes; lists are comma separated; `essential` / `main_image` / `main_video` can be written bare. The text between an item's open and close tags is its body. To put a `"` inside a value write `&quot;`, and write `--&gt;` for a literal `-->` (which would otherwise end the tag).
 
 ```html
 <!-- meta title="God is Light" number="1" part_parent="1" short_description="…" google_docs_url="https://…" -->

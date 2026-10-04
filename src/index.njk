@@ -51,11 +51,12 @@ title: "whatis.foundation"
         </div>
       </header>
 
+      {% for group in bases | forPart(part.number) | superHappyGroups %}
+      {% if group.label %}<h4 class="mb-4 {{ "mt-0" if loop.first else "mt-10" }} text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">{{ group.label }}</h4>{% endif %}
       <div data-masonry class="grid grid-cols-1 items-start gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {% for base in bases | forPart(part.number) %}
-        {{ baseCard(base) }}
-        {% endfor %}
+        {% for base in group.bases %}{{ baseCard(base) }}{% endfor %}
       </div>
+      {% endfor %}
     </section>
     {% endfor %}
 

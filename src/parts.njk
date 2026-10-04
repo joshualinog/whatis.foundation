@@ -30,8 +30,11 @@ eleventyComputed:
 
   <section aria-labelledby="part-bases-heading" class="mt-16">
     <h2 id="part-bases-heading" class="mb-6 text-2xl font-semibold text-slate-900">Bases in this part</h2>
-    <div data-masonry class="grid grid-cols-1 items-start gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-      {% for base in bases | forPart(part.number) %}{{ baseCard(base) }}{% endfor %}
-    </div>
+    {% for group in bases | forPart(part.number) | superHappyGroups %}
+      {% if group.label %}<h4 class="mb-4 {{ "mt-0" if loop.first else "mt-10" }} text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">{{ group.label }}</h4>{% endif %}
+      <div data-masonry class="grid grid-cols-1 items-start gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        {% for base in group.bases %}{{ baseCard(base) }}{% endfor %}
+      </div>
+      {% endfor %}
   </section>
 </article>

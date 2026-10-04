@@ -2,7 +2,8 @@
 
 const { DOC_TYPES } = require('./schema');
 
-const esc = s => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/\s+/g, ' ').trim();
+// Only what would break a tag is escaped: a quote, a literal "-->" (it would end the comment), and an "&" that already looks like an entity.
+const esc = s => String(s == null ? '' : s).replace(/&(?=(?:lt|gt|quot|amp);)/g, '&amp;').replace(/"/g, '&quot;').replace(/-->/g, '--&gt;').replace(/\s+/g, ' ').trim();
 
 /**
  * The tag skeleton for a new issue of the given type: a `meta:TYPE` wrapper
@@ -24,4 +25,7 @@ function buildTemplate(type, values = {}) {
 
 const buildBaseTemplate = values => buildTemplate('base', values);
 
-module.exports = { buildTemplate, buildBaseTemplate };
+// The compact form: just the full title, nothing else filled in yet.
+const buildTitleOnly = title => `<!-- meta:base title="${esc(title)}"--><!--/meta:base-->`;
+
+module.exports = { buildTemplate, buildBaseTemplate, buildTitleOnly };
