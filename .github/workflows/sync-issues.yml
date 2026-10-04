@@ -27,6 +27,15 @@ jobs:
           persist-credentials: true
           fetch-depth: 0
 
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
       - name: Ensure gh is available
         run: gh --version || true
 
@@ -48,7 +57,7 @@ jobs:
             exit 0
           fi
 
-          git commit -m "chore: sync base issues to src/content/bases"
+          git commit -m "chore: sync issues to src/content"
           git remote set-url origin https://x-access-token:${PAT}@github.com/${{ github.repository }}.git
 
           git fetch --no-tags --prune origin $DEFAULT_BRANCH

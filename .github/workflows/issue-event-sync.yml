@@ -27,6 +27,15 @@ jobs:
           persist-credentials: true
           fetch-depth: 0
 
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
       # A full sync rather than one issue: GitHub keeps only one pending run per
       # concurrency group, so a burst of edits (e.g. a migration) skips runs, and
       # the next run must still pick up everything. It also covers deleted issues.
@@ -53,7 +62,7 @@ jobs:
             exit 0
           fi
 
-          git commit -m "chore: sync base issue ${{ github.event.issue.number }} to src/content/bases" || true
+          git commit -m "chore: sync issues to src/content" || true
           git remote set-url origin https://x-access-token:${PAT}@github.com/${{ github.repository }}.git
           git fetch --no-tags --prune origin $DEFAULT_BRANCH
 
