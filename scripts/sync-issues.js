@@ -1,110 +1,129 @@
 #!/usr/bin/env node
-const { execSync } = require('child_process');
+'use strict';
+
+// Syncs the Foundation issues into src/content/:
+//   FOUNDATION BASE (0–101)        → bases/NNN.json
+//   FOUNDATION PART (1–5)          → parts/N.json
+//   FOUNDATION DIVISION (1–2)      → divisions/N.json
+//   FOUNDATION COURSE OVERVIEW     → overview.json
+// The issue body is written in the tag language described in README.md. Its
+// `meta:TYPE` tag decides what it is; it is validated before anything is written.
+//
+//   node scripts/sync-issues.js                    sync every labelled issue
+//   ISSUE_NUMBER=12 node scripts/sync-issues.js    sync one issue (issue events)
+//   node scripts/sync-issues.js delete 12          drop what came from issue 12
+
+const { execFileSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
+const { parseIssue } = require('./lib/issue-doc');
+const { DOC_TYPES } = require('./lib/schema');
 
-const repoEnv = process.env.GITHUB_REPOSITORY || 'joshualinog/whatis.foundation';
-const [OWNER, REPO] = repoEnv.split('/');
-const OUT_DIR = path.join(process.cwd(), 'src', 'data', 'posts');
+const [OWNER, REPO] = (process.env.GITHUB_REPOSITORY || 'joshualinog/whatis.foundation').split('/');
+const CONTENT_DIR = path.join(process.cwd(), 'src', 'content');
 
-function slugify(s) {
-  return s.toString().toLowerCase()
-    .replace(/[^a-z0-9\s-]/g, '')
-    .trim()
-    .replace(/[\s-]+/g, '-');
+const pad = (n, width) => String(n).padStart(width, '0');
+const OUTPUT = {
+  base: doc => path.join('bases', `${pad(doc.number, 3)}.json`),
+  part: doc => path.join('parts', `${doc.number}.json`),
+  division: doc => path.join('divisions', `${doc.number}.json`),
+  overview: () => 'overview.json',
+};
+
+// LABELS overrides the label list for every type (comma separated).
+const LABELS = process.env.BASE_LABELS
+  ? process.env.BASE_LABELS.split(',').map(s => s.trim())
+  : [...new Set(Object.values(DOC_TYPES).flatMap(t => t.labels))];
+
+function gh(args) {
+  return execFileSync('gh', ['api', ...args], { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 });
 }
 
-function writePostJson(issue) {
-  const num = String(issue.number).padStart(5,'0');
-  const slug = issue.title ? slugify(issue.title) : `issue-${issue.number}`;
-  const filename = `${num}-${slug}.json`;
-  const outfile = path.join(OUT_DIR, filename);
-
-  const post = {
-    id: issue.number,
-    title: issue.title || '',
-    slug,
-    author: issue.user && issue.user.login ? issue.user.login : '',
-    createdAt: issue.created_at,
-    updatedAt: issue.updated_at || issue.created_at,
-    labels: (issue.labels || []).map(l => (l.name || l)),
-    status: ((issue.labels || []).some(l => (l.name || l) === 'draft') ? 'draft' : 'published'),
-    excerpt: (issue.body || '').split('\n\n')[0].replace(/\n/g,' '),
-    content: issue.body || '',
-    raw_issue: {
-      url: issue.html_url,
-    },
-  };
-
-  fs.writeFileSync(outfile, JSON.stringify(post, null, 2) + '\n', 'utf8');
-  console.log('wrote', outfile);
-}
-
-function mkdirp(dir) {
-  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-}
-
-function fetchAll() {
-  const cmd = `gh api -X GET "/repos/${OWNER}/${REPO}/issues?labels=contentPost&state=all&per_page=100"`;
-  const out = execSync(cmd, { encoding: 'utf8' });
-  return JSON.parse(out);
+function fetchLabelled() {
+  const byNumber = new Map();
+  LABELS.forEach(label => {
+    const out = gh(['--paginate', '--jq', '.[]', '-X', 'GET', `/repos/${OWNER}/${REPO}/issues`, '-f', `labels=${label}`, '-f', 'state=all', '-f', 'per_page=100']);
+    out.split('\n').filter(Boolean).forEach(line => {
+      const issue = JSON.parse(line);
+      if (!issue.pull_request) byNumber.set(issue.number, issue);
+    });
+  });
+  return [...byNumber.values()];
 }
 
 function fetchSingle(number) {
-  const cmd = `gh api -X GET "/repos/${OWNER}/${REPO}/issues/${number}"`;
-  const out = execSync(cmd, { encoding: 'utf8' });
-  return JSON.parse(out);
+  return JSON.parse(gh(['-X', 'GET', `/repos/${OWNER}/${REPO}/issues/${number}`]));
 }
 
-if (process.argv[2] === 'delete') {
-  const num = String(process.argv[3]).padStart(5, '0');
-  const files = fs.readdirSync(OUT_DIR).filter(f => f.startsWith(`${num}-`) && f.endsWith('.json'));
-  files.forEach(f => {
-    fs.unlinkSync(path.join(OUT_DIR, f));
-    console.log('Deleted', f, 'because issue deleted');
+function isContentLabelled(issue) {
+  const names = (issue.labels || []).map(l => l.name || l);
+  return names.some(n => LABELS.includes(n));
+}
+
+// Every file this script has written, with the issue it came from.
+function existingFiles() {
+  const files = [path.join(CONTENT_DIR, 'overview.json')];
+  ['bases', 'parts', 'divisions'].forEach(dir => {
+    const full = path.join(CONTENT_DIR, dir);
+    if (fs.existsSync(full)) fs.readdirSync(full).filter(f => f.endsWith('.json')).forEach(f => files.push(path.join(full, f)));
   });
-  process.exit(0);
+  return files.filter(f => fs.existsSync(f)).map(file => ({ file, data: JSON.parse(fs.readFileSync(file, 'utf8')) }));
+}
+
+function removeForIssue(issueNumber, reason) {
+  existingFiles()
+    .filter(({ data }) => data.issue && data.issue.number === issueNumber)
+    .forEach(({ file }) => {
+      fs.unlinkSync(file);
+      console.log(`Deleted ${path.relative(CONTENT_DIR, file)} (${reason})`);
+    });
+}
+
+let failures = 0;
+
+function writeIssue(issue) {
+  const { doc, errors, warnings } = parseIssue(issue);
+  warnings.forEach(w => console.log(`::warning title=Issue #${issue.number}::${w}`));
+  if (!doc) {
+    failures += 1;
+    errors.forEach(e => console.log(`::error title=Issue #${issue.number} skipped::${e}`));
+    return;
+  }
+  const rel = OUTPUT[doc.type](doc);
+  const clash = existingFiles().find(({ file, data }) => file === path.join(CONTENT_DIR, rel) && data.issue && data.issue.number !== issue.number);
+  if (clash) console.log(`::warning title=Issue #${issue.number}::replaces ${rel}, previously written from issue #${clash.data.issue.number}`);
+
+  // Content that moved to another file (a changed number or type) must not leave a stale copy.
+  removeForIssue(issue.number, 'rewritten');
+  const target = path.join(CONTENT_DIR, rel);
+  fs.mkdirSync(path.dirname(target), { recursive: true });
+  fs.writeFileSync(target, JSON.stringify(doc, null, 2) + '\n', 'utf8');
+  console.log(`wrote ${rel} (${doc.type}) from issue #${issue.number}`);
 }
 
 function main() {
-  mkdirp(OUT_DIR);
-
-  const single = process.env.ISSUE_NUMBER;
-  if (single) {
-    console.log('Fetching single issue', single);
-    const issue = fetchSingle(single);
-    const hasLabel = (issue.labels || []).some(l => (l.name || l) === 'contentPost');
-    if (hasLabel) {
-      writePostJson(issue);
-    } else {
-      const num = String(issue.number).padStart(5, '0');
-      const files = fs.readdirSync(OUT_DIR).filter(f => f.startsWith(`${num}-`) && f.endsWith('.json'));
-      files.forEach(f => {
-        fs.unlinkSync(path.join(OUT_DIR, f));
-        console.log('Deleted', f, 'because label removed');
-      });
-    }
+  if (process.argv[2] === 'delete') {
+    removeForIssue(Number(process.argv[3]), 'issue deleted');
     return;
   }
 
-  console.log('Fetching all issues labeled contentPost');
-  const issues = fetchAll();
-  if (!Array.isArray(issues)) {
-    console.error('unexpected response', issues);
-    process.exit(1);
+  if (process.env.ISSUE_NUMBER) {
+    const issue = fetchSingle(process.env.ISSUE_NUMBER);
+    if (!issue.pull_request && isContentLabelled(issue)) writeIssue(issue);
+    else removeForIssue(issue.number, 'label removed');
+    return;
   }
 
-  const currentIds = new Set(issues.map(i => i.number));
-  const files = fs.readdirSync(OUT_DIR).filter(f => f.endsWith('.json'));
-  files.forEach(f => {
-    const num = parseInt(f.split('-')[0], 10);
-    if (!currentIds.has(num)) {
-      fs.unlinkSync(path.join(OUT_DIR, f));
-      console.log('Deleted', f);
+  const issues = fetchLabelled();
+  const current = new Set(issues.map(i => i.number));
+  existingFiles().forEach(({ file, data }) => {
+    if (!data.issue || !current.has(data.issue.number)) {
+      fs.unlinkSync(file);
+      console.log(`Deleted ${path.relative(CONTENT_DIR, file)}`);
     }
   });
-
-  issues.forEach(i => writePostJson(i));
+  issues.sort((a, b) => a.number - b.number).forEach(writeIssue);
 }
 
 main();
+if (failures) console.log(`${failures} issue(s) were skipped because of errors.`);

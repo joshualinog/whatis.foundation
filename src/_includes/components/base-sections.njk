@@ -1,0 +1,7 @@
+{# Titled section wrapper used on base pages: {% call section(id, heading) %}…{% endcall %} #}
+{% macro section(id, heading) %}
+<section id="{{ id }}" aria-labelledby="{{ id }}-heading" class="mt-12">
+  <h2 id="{{ id }}-heading" class="mb-4 text-2xl font-semibold text-slate-900">{{ heading }}</h2>
+  {{ caller() }}
+</section>
+{% endmacro %}

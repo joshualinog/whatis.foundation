@@ -2,10 +2,16 @@ name: Issue Event Sync
 
 permissions:
   contents: write
+  issues: write
+
+# Serialize syncs so quick successive edits cannot race each other's pushes.
+concurrency:
+  group: base-issue-sync
+  cancel-in-progress: false
 
 on:
   issues:
-    types: [labeled, unlabeled, edited, deleted]
+    types: [opened, labeled, unlabeled, edited, deleted]
 
 jobs:
   event-sync:
@@ -21,18 +27,13 @@ jobs:
           persist-credentials: true
           fetch-depth: 0
 
-      - name: Handle deleted issue
-        if: github.event.action == 'deleted'
-        run: node ./scripts/sync-issues.js delete ${{ github.event.issue.number }}
+      # A full sync rather than one issue: GitHub keeps only one pending run per
+      # concurrency group, so a burst of edits (e.g. a migration) skips runs, and
+      # the next run must still pick up everything. It also covers deleted issues.
+      - name: Sync all base, part, division and overview issues
+        run: node ./scripts/sync-issues.js
 
-      - name: Run sync for single issue
-        if: github.event.action != 'deleted'
-        env:
-          ISSUE_NUMBER: ${{ github.event.issue.number }}
-        run: |
-          node ./scripts/sync-issues.js
-
-      - name: Commit generated post
+      - name: Commit synced base
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PAT: ${{ secrets.GH_PAT }}
@@ -46,13 +47,13 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          git add src/data/posts || true
+          git add src/content || true
           if git diff --cached --quiet; then
             echo "No changes to commit"
             exit 0
           fi
 
-          git commit -m "chore: sync issue ${{ github.event.issue.number }} to src/data/posts" || true
+          git commit -m "chore: sync base issue ${{ github.event.issue.number }} to src/content/bases" || true
           git remote set-url origin https://x-access-token:${PAT}@github.com/${{ github.repository }}.git
           git fetch --no-tags --prune origin $DEFAULT_BRANCH
 

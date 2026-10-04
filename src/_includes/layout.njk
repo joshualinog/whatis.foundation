@@ -3,20 +3,20 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{{ title }} | whatis.foundation</title>
-    <meta name="description" content="whatis.foundation is a sacred educational course with five parts and 99 meetings." />
+    <title>{% if title != "whatis.foundation" %}{{ title }} | {% endif %}whatis.foundation</title>
+    <meta name="description" content="{{ description or course.description }}" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/styles.css" />
   </head>
   <body class="min-h-screen bg-slate-50 text-slate-900">
     <div class="min-h-screen">
       <header class="border-b border-slate-200 bg-white/90 backdrop-blur">
-        <div class="mx-auto flex max-w-5xl items-center justify-between px-6 py-5 sm:px-8 lg:px-12">
+        <div class="mx-auto flex max-w-7xl items-center justify-between px-6 py-5 sm:px-8 lg:px-12">
           <a href="/" class="text-lg font-semibold tracking-tight text-slate-900">whatis.foundation</a>
-          <p class="text-sm text-slate-500">A sacred course in five parts, ninety-nine meetings.</p>
+          <p class="hidden text-sm text-slate-500 sm:block">{{ course.tagline }}</p>
         </div>
       </header>
 
@@ -24,7 +24,7 @@
     </div>
 
     <footer class="border-t border-slate-200 bg-white py-8">
-      <div class="mx-auto max-w-5xl px-6 text-sm text-slate-500 sm:px-8 lg:px-12">
+      <div class="mx-auto max-w-7xl px-6 text-sm text-slate-500 sm:px-8 lg:px-12">
         <p>Created for sacred education and community study.</p>
       </div>
     </footer>

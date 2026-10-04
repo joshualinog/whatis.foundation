@@ -2,70 +2,77 @@
 layout: layout.njk
 title: "whatis.foundation"
 ---
+{% from "components/base-card.njk" import baseCard %}
 
 <section class="mx-auto max-w-7xl px-6 py-16 sm:px-8 lg:px-12">
 
-  {# ── Site intro ── #}
   <div class="mb-16 space-y-4 text-center">
     <p class="text-sm uppercase tracking-[0.35em] text-brand-600">A Sacred Educational Course</p>
-    <h1 class="text-5xl font-semibold tracking-tight text-slate-900 sm:text-6xl">WHAT IS. FOUNDATION?</h1>
-    <p class="mx-auto max-w-3xl text-lg leading-8 text-slate-600">
-      A 99-meeting course built on a parable of light, the prism, the tablets, and the rainbow staircase. God is light. The prism guides our travel. The tablets carry the ten words. The rainbow is a staircase of light. Guided forward, we become light.
-    </p>
+    <h1 class="text-5xl font-semibold tracking-tight text-slate-900 sm:text-6xl">{{ course.heading }}</h1>
+    <p class="mx-auto max-w-3xl text-lg leading-8 text-slate-600">{{ course.description }}</p>
+    <p><a href="{{ course.overview.url }}" class="text-sm font-semibold text-brand-700 underline decoration-brand-200 underline-offset-4 hover:text-brand-900">Course overview →</a></p>
   </div>
 
-  {# ── Session Zero ── #}
-  <div class="mb-16 rounded-3xl border border-slate-200 bg-white p-8 shadow-soft">
-    <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-      <div>
-        <p class="text-sm uppercase tracking-[0.3em] text-brand-600">Session Zero</p>
-        <h2 class="mt-2 text-2xl font-semibold text-slate-900">{{ course.intro.title }}</h2>
-      </div>
-      <span class="inline-flex rounded-full bg-slate-100 px-4 py-2 text-sm font-medium text-slate-700">Meeting 0</span>
-    </div>
-    <p class="mt-4 text-slate-600">{{ course.intro.details }}</p>
-  </div>
-
-  {# ── Five Parts ── #}
-  {% for part in course.parts %}
-  <section id="{{ part.id }}" class="mb-20">
-
-    {# Part header #}
-    <div class="mb-8 rounded-3xl border border-slate-200 bg-white p-8 shadow-soft">
-      <div class="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
-        <div class="flex-shrink-0">
-          <p class="text-sm uppercase tracking-[0.35em] text-brand-600">Part {{ part.number }}</p>
-          <h2 class="mt-2 text-3xl font-semibold text-slate-900">{{ part.title }}</h2>
-          <p class="mt-1 text-sm text-slate-500">{{ part.subtitle }}</p>
-        </div>
-        <p class="max-w-2xl text-slate-600 leading-7">{{ part.overview }}</p>
-      </div>
-    </div>
-
-    {# Meeting cards — 2-col on sm, 4-col on lg #}
-    <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-      {% for meeting in part.meetings %}
-      <article id="meeting-{{ meeting.number }}" class="group flex flex-col overflow-hidden rounded-3xl border border-slate-200 bg-white transition-all hover:-translate-y-1 hover:shadow-soft">
-
-        {# Card image / header #}
-        <div class="relative flex h-40 flex-col justify-end bg-gradient-to-br {{ part.color }} p-5">
-          <p class="text-xs uppercase tracking-[0.3em] {{ part.labelColor }}">Meeting {{ meeting.number }}</p>
-          <h3 class="mt-1 text-base font-semibold leading-snug text-white">{{ meeting.title }}</h3>
-        </div>
-
-        {# Card body #}
-        <div class="flex flex-1 flex-col gap-3 p-5">
-          <p class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Brief</p>
-          <p class="text-sm font-medium text-slate-800">{{ meeting.description }}</p>
-          <p class="text-sm leading-6 text-slate-500">{{ meeting.details }}</p>
-          <div class="mt-auto pt-4">
-            <a href="#meeting-{{ meeting.number }}" class="inline-flex items-center rounded-full bg-brand-600 px-4 py-2 text-xs font-semibold text-white transition hover:bg-brand-700">Open meeting</a>
-          </div>
-        </div>
-      </article>
-      {% endfor %}
+  {# Base 0 — introduction #}
+  <section aria-labelledby="intro-heading" class="mb-20">
+    <h2 id="intro-heading" class="sr-only">Introduction</h2>
+    <div class="mx-auto max-w-md">
+      {{ baseCard(bases[0]) }}
     </div>
   </section>
+
+  {% for division in course.divisions %}
+  <section id="division-{{ division.number }}" aria-labelledby="division-{{ division.number }}-heading" class="mb-20">
+    <header class="mb-10 border-l-4 border-brand-500 pl-6">
+      <p class="text-sm uppercase tracking-[0.35em] text-brand-600">Division {{ division.number }}</p>
+      <h2 id="division-{{ division.number }}-heading" class="mt-2 text-4xl font-semibold text-slate-900"><a href="{{ division.url }}" class="hover:text-brand-700">{{ division.title }}</a></h2>
+      <p class="mt-3 max-w-3xl text-lg leading-8 text-slate-600">{{ division.summary }}</p>
+      {% if division.points.length %}
+      <ul class="mt-3 max-w-3xl list-disc space-y-1 pl-5 text-slate-600">
+        {% for point in division.points %}<li>{{ point }}</li>{% endfor %}
+      </ul>
+      {% endif %}
+      <p class="mt-3 text-sm font-medium text-slate-500">{{ division.scripture }}</p>
+    </header>
+
+    {% for partNumber in division.parts %}
+    {% set part = course.parts[partNumber - 1] %}
+    <section id="part-{{ part.number }}" aria-labelledby="part-{{ part.number }}-heading" class="mb-14">
+      <header class="mb-8 rounded-3xl border border-slate-200 bg-white p-8 shadow-soft">
+        <div class="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
+          <div class="lg:max-w-md">
+            <p class="text-sm uppercase tracking-[0.35em] text-brand-600">Part {{ part.number }} · Bases {{ part.from }}–{{ part.to }}</p>
+            <h3 id="part-{{ part.number }}-heading" class="mt-2 text-3xl font-semibold text-slate-900"><a href="{{ part.url }}" class="hover:text-brand-700">{{ part.title }}</a></h3>
+            <p class="mt-2 text-sm text-slate-500">{{ part.parable }}</p>
+          </div>
+          <div class="max-w-2xl">
+            <p class="leading-7 text-slate-600">{{ part.overview }}</p>
+          </div>
+        </div>
+      </header>
+
+      <div class="columns-1 gap-5 sm:columns-2 lg:columns-3 xl:columns-4">
+        {% for base in bases | forPart(part.number) %}
+        {{ baseCard(base) }}
+        {% endfor %}
+      </div>
+    </section>
+    {% endfor %}
+
+    {# Base 30 — the nexus sits between the two divisions #}
+    {% if division.number == 1 %}
+    <section id="nexus" aria-labelledby="nexus-heading" class="mt-20">
+      <h2 id="nexus-heading" class="mb-6 text-center text-sm uppercase tracking-[0.35em] text-brand-600">The Nexus: Jesus, the Only Foundation</h2>
+      <div class="mx-auto max-w-md">{{ baseCard(bases[30]) }}</div>
+    </section>
+    {% endif %}
+  </section>
   {% endfor %}
+
+  {# Base 101 — laying on of hands #}
+  <section aria-labelledby="ceremony-heading" class="mb-4">
+    <h2 id="ceremony-heading" class="mb-6 text-center text-sm uppercase tracking-[0.35em] text-brand-600">The Ceremony</h2>
+    <div class="mx-auto max-w-md">{{ baseCard(bases[101]) }}</div>
+  </section>
 
 </section>
