@@ -30,7 +30,7 @@ eleventyComputed:
 
   <section aria-labelledby="part-bases-heading" class="mt-16">
     <h2 id="part-bases-heading" class="mb-6 text-2xl font-semibold text-slate-900">Bases in this part</h2>
-    <div class="columns-1 gap-5 sm:columns-2 lg:columns-3 xl:columns-4">
+    <div data-masonry class="grid grid-cols-1 items-start gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
       {% for base in bases | forPart(part.number) %}{{ baseCard(base) }}{% endfor %}
     </div>
   </section>

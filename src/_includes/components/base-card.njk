@@ -1,6 +1,6 @@
 {# Semantic card for one base. The title link is stretched over the whole card. #}
 {% macro baseCard(base) %}
-<article class="group relative mb-5 break-inside-avoid overflow-hidden rounded-3xl border border-slate-200 bg-white transition-all focus-within:ring-2 focus-within:ring-brand-500 hover:-translate-y-1 hover:shadow-soft">
+<article class="group relative overflow-hidden rounded-3xl border border-slate-200 bg-white transition-all focus-within:ring-2 focus-within:ring-brand-500 hover:-translate-y-1 hover:shadow-soft">
   <header class="flex flex-col justify-end bg-gradient-to-br {{ base.accent.gradient if base.accent else 'from-slate-600 to-slate-800' }} p-5 pt-12">
     <p class="text-xs font-semibold uppercase tracking-[0.3em] {{ base.accent.label if base.accent else 'text-slate-200' }}">
       Base {{ base.number }}{% if base.special %} · {{ base.special.role }}{% elif base.space %} · {{ base.space.name }}{% endif %}

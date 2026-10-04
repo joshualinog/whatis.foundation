@@ -30,6 +30,19 @@
 }
 
 @layer components {
+  /* Cards are dealt left to right, row by row, into stacked columns (see layout.njk); without JS the grid keeps row order. */
+  [data-masonry].is-masonry {
+    display: flex;
+    align-items: flex-start;
+  }
+  [data-masonry] > .masonry-col {
+    display: flex;
+    min-width: 0;
+    flex: 1 1 0%;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
   .base-prose {
     @apply space-y-4 leading-7 text-slate-700;
   }

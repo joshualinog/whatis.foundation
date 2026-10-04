@@ -130,5 +130,46 @@
         <p>Created for sacred education and community study.</p>
       </div>
     </footer>
+  <script>
+    (function () {
+      var containers = [].slice.call(document.querySelectorAll('[data-masonry]'));
+      if (!containers.length) return;
+      containers.forEach(function (el) { el.items = [].slice.call(el.children); });
+
+      function layout(el) {
+        el.classList.remove('is-masonry');
+        el.items.forEach(function (item) { el.appendChild(item); });
+        [].slice.call(el.querySelectorAll(':scope > .masonry-col')).forEach(function (c) { c.remove(); });
+        var count = getComputedStyle(el).gridTemplateColumns.split(' ').length;
+        el.masonryCount = count;
+        if (count < 2) return;
+        el.classList.add('is-masonry');
+        var cols = [];
+        for (var i = 0; i < count; i++) {
+          var col = document.createElement('div');
+          col.className = 'masonry-col';
+          el.appendChild(col);
+          cols.push(col);
+        }
+        // deal in reading order: card 1 → column 1, card 2 → column 2 … then wrap to column 1
+        el.items.forEach(function (item, i) { cols[i % count].appendChild(item); });
+      }
+
+      function columnsFor(el) {
+        var was = el.classList.contains('is-masonry');
+        el.classList.remove('is-masonry');
+        var n = getComputedStyle(el).gridTemplateColumns.split(' ').length;
+        if (was) el.classList.add('is-masonry');
+        return n;
+      }
+
+      function run() { containers.forEach(layout); }
+      run();
+      window.addEventListener('load', run);
+      window.addEventListener('resize', function () {
+        containers.forEach(function (el) { if (columnsFor(el) !== el.masonryCount) layout(el); });
+      });
+    })();
+  </script>
   </body>
 </html>

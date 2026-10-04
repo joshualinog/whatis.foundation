@@ -104,9 +104,9 @@
 
   <section aria-labelledby="part-bases-heading" class="mt-16">
     <h2 id="part-bases-heading" class="mb-6 text-2xl font-semibold text-slate-900">Bases in this part</h2>
-    <div class="columns-1 gap-5 sm:columns-2 lg:columns-3 xl:columns-4">
+    <div data-masonry class="grid grid-cols-1 items-start gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
       
-<article class="group relative mb-5 break-inside-avoid overflow-hidden rounded-3xl border border-slate-200 bg-white transition-all focus-within:ring-2 focus-within:ring-brand-500 hover:-translate-y-1 hover:shadow-soft">
+<article class="group relative overflow-hidden rounded-3xl border border-slate-200 bg-white transition-all focus-within:ring-2 focus-within:ring-brand-500 hover:-translate-y-1 hover:shadow-soft">
   <header class="flex flex-col justify-end bg-gradient-to-br from-violet-500 to-violet-800 p-5 pt-12">
     <p class="text-xs font-semibold uppercase tracking-[0.3em] text-violet-100">
       Base 23 · Violet
@@ -130,7 +130,7 @@
   </footer>
 </article>
 
-<article class="group relative mb-5 break-inside-avoid overflow-hidden rounded-3xl border border-slate-200 bg-white transition-all focus-within:ring-2 focus-within:ring-brand-500 hover:-translate-y-1 hover:shadow-soft">
+<article class="group relative overflow-hidden rounded-3xl border border-slate-200 bg-white transition-all focus-within:ring-2 focus-within:ring-brand-500 hover:-translate-y-1 hover:shadow-soft">
   <header class="flex flex-col justify-end bg-gradient-to-br from-indigo-500 to-indigo-800 p-5 pt-12">
     <p class="text-xs font-semibold uppercase tracking-[0.3em] text-indigo-100">
       Base 24 · Indigo
@@ -154,7 +154,7 @@
   </footer>
 </article>
 
-<article class="group relative mb-5 break-inside-avoid overflow-hidden rounded-3xl border border-slate-200 bg-white transition-all focus-within:ring-2 focus-within:ring-brand-500 hover:-translate-y-1 hover:shadow-soft">
+<article class="group relative overflow-hidden rounded-3xl border border-slate-200 bg-white transition-all focus-within:ring-2 focus-within:ring-brand-500 hover:-translate-y-1 hover:shadow-soft">
   <header class="flex flex-col justify-end bg-gradient-to-br from-blue-500 to-blue-800 p-5 pt-12">
     <p class="text-xs font-semibold uppercase tracking-[0.3em] text-blue-100">
       Base 25 · Blue
@@ -178,7 +178,7 @@
   </footer>
 </article>
 
-<article class="group relative mb-5 break-inside-avoid overflow-hidden rounded-3xl border border-slate-200 bg-white transition-all focus-within:ring-2 focus-within:ring-brand-500 hover:-translate-y-1 hover:shadow-soft">
+<article class="group relative overflow-hidden rounded-3xl border border-slate-200 bg-white transition-all focus-within:ring-2 focus-within:ring-brand-500 hover:-translate-y-1 hover:shadow-soft">
   <header class="flex flex-col justify-end bg-gradient-to-br from-green-500 to-green-800 p-5 pt-12">
     <p class="text-xs font-semibold uppercase tracking-[0.3em] text-green-100">
       Base 26 · Green
@@ -202,7 +202,7 @@
   </footer>
 </article>
 
-<article class="group relative mb-5 break-inside-avoid overflow-hidden rounded-3xl border border-slate-200 bg-white transition-all focus-within:ring-2 focus-within:ring-brand-500 hover:-translate-y-1 hover:shadow-soft">
+<article class="group relative overflow-hidden rounded-3xl border border-slate-200 bg-white transition-all focus-within:ring-2 focus-within:ring-brand-500 hover:-translate-y-1 hover:shadow-soft">
   <header class="flex flex-col justify-end bg-gradient-to-br from-yellow-500 to-yellow-700 p-5 pt-12">
     <p class="text-xs font-semibold uppercase tracking-[0.3em] text-yellow-50">
       Base 27 · Yellow
@@ -226,7 +226,7 @@
   </footer>
 </article>
 
-<article class="group relative mb-5 break-inside-avoid overflow-hidden rounded-3xl border border-slate-200 bg-white transition-all focus-within:ring-2 focus-within:ring-brand-500 hover:-translate-y-1 hover:shadow-soft">
+<article class="group relative overflow-hidden rounded-3xl border border-slate-200 bg-white transition-all focus-within:ring-2 focus-within:ring-brand-500 hover:-translate-y-1 hover:shadow-soft">
   <header class="flex flex-col justify-end bg-gradient-to-br from-orange-500 to-orange-700 p-5 pt-12">
     <p class="text-xs font-semibold uppercase tracking-[0.3em] text-orange-100">
       Base 28 · Orange
@@ -250,7 +250,7 @@
   </footer>
 </article>
 
-<article class="group relative mb-5 break-inside-avoid overflow-hidden rounded-3xl border border-slate-200 bg-white transition-all focus-within:ring-2 focus-within:ring-brand-500 hover:-translate-y-1 hover:shadow-soft">
+<article class="group relative overflow-hidden rounded-3xl border border-slate-200 bg-white transition-all focus-within:ring-2 focus-within:ring-brand-500 hover:-translate-y-1 hover:shadow-soft">
   <header class="flex flex-col justify-end bg-gradient-to-br from-red-500 to-red-800 p-5 pt-12">
     <p class="text-xs font-semibold uppercase tracking-[0.3em] text-red-100">
       Base 29 · Red
@@ -285,5 +285,46 @@
         <p>Created for sacred education and community study.</p>
       </div>
     </footer>
+  <script>
+    (function () {
+      var containers = [].slice.call(document.querySelectorAll('[data-masonry]'));
+      if (!containers.length) return;
+      containers.forEach(function (el) { el.items = [].slice.call(el.children); });
+
+      function layout(el) {
+        el.classList.remove('is-masonry');
+        el.items.forEach(function (item) { el.appendChild(item); });
+        [].slice.call(el.querySelectorAll(':scope > .masonry-col')).forEach(function (c) { c.remove(); });
+        var count = getComputedStyle(el).gridTemplateColumns.split(' ').length;
+        el.masonryCount = count;
+        if (count < 2) return;
+        el.classList.add('is-masonry');
+        var cols = [];
+        for (var i = 0; i < count; i++) {
+          var col = document.createElement('div');
+          col.className = 'masonry-col';
+          el.appendChild(col);
+          cols.push(col);
+        }
+        // deal in reading order: card 1 → column 1, card 2 → column 2 … then wrap to column 1
+        el.items.forEach(function (item, i) { cols[i % count].appendChild(item); });
+      }
+
+      function columnsFor(el) {
+        var was = el.classList.contains('is-masonry');
+        el.classList.remove('is-masonry');
+        var n = getComputedStyle(el).gridTemplateColumns.split(' ').length;
+        if (was) el.classList.add('is-masonry');
+        return n;
+      }
+
+      function run() { containers.forEach(layout); }
+      run();
+      window.addEventListener('load', run);
+      window.addEventListener('resize', function () {
+        containers.forEach(function (el) { if (columnsFor(el) !== el.masonryCount) layout(el); });
+      });
+    })();
+  </script>
   </body>
 </html>
