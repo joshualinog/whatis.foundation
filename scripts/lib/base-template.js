@@ -2,7 +2,7 @@
 
 const { DOC_TYPES } = require('./schema');
 
-const esc = s => String(s == null ? '' : s).replace(/"/g, '&quot;').replace(/\s+/g, ' ').trim();
+const esc = s => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/\s+/g, ' ').trim();
 
 /**
  * The tag skeleton for a new issue of the given type: a `meta:TYPE` wrapper

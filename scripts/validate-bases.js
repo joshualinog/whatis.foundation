@@ -44,6 +44,13 @@ defaults.parts.forEach(p => check(`template for part ${p.number}`, () => skeleto
 defaults.divisions.forEach(d => check(`template for division ${d.number}`, () => skeleton('division', d.number, `Division ${d.number}`, 'FOUNDATION DIVISION')));
 check('template for overview', () => skeleton('overview', undefined, 'Course overview', 'FOUNDATION COURSE OVERVIEW'));
 
+// titles can hold characters that would end a tag, such as "-->" in base 30
+titles.forEach(t => check(`title round trip for base ${t.number}`, () => {
+  const { doc, errors } = parse(`Base ${t.number}`, buildTemplate('base', { number: t.number, title: t.title }), 'FOUNDATION BASE');
+  assert(doc, errors.join('; '));
+  assert.strictEqual(doc.title, t.title.replace(/\s+/g, ' ').trim());
+}));
+
 // 2. parser behaviour
 check('resource item aliases + upsert', () => {
   const { raw, warnings } = parseDocText(`

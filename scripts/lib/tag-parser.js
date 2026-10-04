@@ -38,7 +38,8 @@ function parseAttributes(source) {
     const key = m[1].toLowerCase();
     const hasValue = m[2] !== undefined || m[3] !== undefined;
     let value = hasValue ? (m[2] !== undefined ? m[2] : m[3]) : 'true';
-    value = value.trim();
+    // &lt; &gt; &quot; let a value hold characters that would end the tag (a literal "-->" closes the comment)
+    value = value.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&amp;/g, '&').trim();
     if (value === '') continue;
     if (NUMERIC_ATTRS.has(key) && /^-?\d+(\.\d+)?$/.test(value)) value = Number(value);
     else if (BOOLEAN_ATTRS.has(key)) value = !/^(false|no|0)$/i.test(value);

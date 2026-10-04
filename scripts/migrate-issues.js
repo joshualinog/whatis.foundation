@@ -102,7 +102,7 @@ function classifyContainer(issue) {
     m = /part_number:\s*(\d)/.exec(issue.body || '');
     if (m) return { type: 'part', number: Number(m[1]) };
   }
-  if (hasLabel(issue, LABEL.overview) || /course overview/i.test(title)) return { type: 'overview', number: null };
+  if (hasLabel(issue, LABEL.overview)) return { type: 'overview', number: null };
   return null;
 }
 
