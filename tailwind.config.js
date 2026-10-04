@@ -1,5 +1,5 @@
 module.exports = {
-  content: ["./src/**/*.{njk,html,md}"],
+  content: ["./src/**/*.{njk,html,md}", "./src/content/course-defaults.js"],
   theme: {
     extend: {
       colors: {

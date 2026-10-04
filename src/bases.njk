@@ -1,0 +1,62 @@
+---
+layout: layout.njk
+pagination:
+  data: bases
+  size: 1
+  alias: base
+permalink: "bases/{{ base.number }}/index.html"
+eleventyComputed:
+  title: "Base {{ base.number }} — {{ base.headline }}"
+  description: "{{ base.short_description or base.subtitle or base.headline }}"
+---
+{% set prev = bases[base.number - 1] if base.number > 0 else none %}
+{% set next = bases[base.number + 1] if base.number < 101 else none %}
+
+<article class="mx-auto max-w-4xl px-6 py-12 sm:px-8">
+
+  <nav aria-label="Breadcrumb" class="mb-6 text-sm text-slate-500">
+    <a href="/" class="hover:text-brand-700">All bases</a>
+    {% if base.part %}<span aria-hidden="true"> / </span><a href="/#part-{{ base.part.number }}" class="hover:text-brand-700">Part {{ base.part.number }} · {{ base.part.title }}</a>
+    {% else %}<span aria-hidden="true"> / </span><span>{{ base.special.role }}</span>{% endif %}
+  </nav>
+
+  <header class="overflow-hidden rounded-3xl bg-gradient-to-br {{ base.accent.gradient if base.accent else 'from-slate-600 to-slate-800' }} p-8 text-white shadow-soft sm:p-10">
+    <p class="text-sm font-semibold uppercase tracking-[0.35em] {{ base.accent.label if base.accent else 'text-slate-200' }}">
+      Base {{ base.number }}{% if base.special %} · {{ base.special.role }}{% endif %}{% if base.space %} · Space {{ base.space.number }} · {{ base.space.name }}{% endif %}
+    </p>
+    <h1 class="mt-3 text-4xl font-semibold leading-tight sm:text-5xl">{{ base.headline }}</h1>
+    {% if base.subtitle %}<p class="mt-4 text-lg leading-8 text-white/90">{{ base.subtitle }}</p>{% endif %}
+  </header>
+
+  {% set doc = base %}{% set body = base.base_body %}{% set has_content = base.has_content %}{% set fallback_note = base.special.note if base.special else "" %}
+  {% include "components/content-sections.njk" %}
+
+  <nav aria-label="Previous and next base" class="mt-16 grid gap-4 sm:grid-cols-2">
+    {% if prev %}<a href="{{ prev.url }}" rel="prev" class="rounded-2xl border border-slate-200 bg-white p-4 transition hover:border-brand-300"><span class="text-xs uppercase tracking-[0.25em] text-slate-400">← Base {{ prev.number }}</span><span class="mt-1 block font-semibold text-slate-900">{{ prev.headline }}</span></a>{% else %}<span></span>{% endif %}
+    {% if next %}<a href="{{ next.url }}" rel="next" class="rounded-2xl border border-slate-200 bg-white p-4 text-right transition hover:border-brand-300 sm:col-start-2"><span class="text-xs uppercase tracking-[0.25em] text-slate-400">Base {{ next.number }} →</span><span class="mt-1 block font-semibold text-slate-900">{{ next.headline }}</span></a>{% endif %}
+  </nav>
+
+  <section aria-labelledby="comments-heading" class="mt-16">
+    <h2 id="comments-heading" class="mb-4 text-2xl font-semibold text-slate-900">Comments</h2>
+    {% if site.giscus.repoId and site.giscus.categoryId %}
+    <script src="https://giscus.app/client.js"
+      data-repo="{{ site.giscus.repo }}"
+      data-repo-id="{{ site.giscus.repoId }}"
+      data-category="{{ site.giscus.category }}"
+      data-category-id="{{ site.giscus.categoryId }}"
+      data-mapping="pathname"
+      data-strict="0"
+      data-reactions-enabled="1"
+      data-emit-metadata="0"
+      data-input-position="top"
+      data-theme="light"
+      data-lang="en"
+      data-loading="lazy"
+      crossorigin="anonymous"
+      async></script>
+    {% else %}
+    <p class="rounded-2xl border border-dashed border-slate-300 bg-white p-6 text-slate-500">Comments are not configured yet. Set the GISCUS_REPO_ID and GISCUS_CATEGORY_ID build variables to enable them.</p>
+    {% endif %}
+  </section>
+
+</article>

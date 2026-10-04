@@ -28,3 +28,29 @@
     box-shadow: 0 24px 80px rgba(15, 23, 42, 0.08);
   }
 }
+
+@layer components {
+  .base-prose {
+    @apply space-y-4 leading-7 text-slate-700;
+  }
+  .base-prose h1,
+  .base-prose h2,
+  .base-prose h3 {
+    @apply mt-6 font-semibold text-slate-900;
+  }
+  .base-prose a {
+    @apply text-brand-700 underline underline-offset-4;
+  }
+  .base-prose ul {
+    @apply list-disc pl-5;
+  }
+  .base-prose ol {
+    @apply list-decimal pl-5;
+  }
+  .base-prose img {
+    @apply rounded-2xl;
+  }
+  .base-prose blockquote {
+    @apply border-l-4 border-slate-200 pl-4 text-slate-600;
+  }
+}

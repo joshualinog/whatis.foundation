@@ -2,6 +2,11 @@ name: Sync Issues to Data
 
 permissions:
   contents: write
+  issues: read
+
+concurrency:
+  group: base-issue-sync
+  cancel-in-progress: false
 
 on:
   schedule:
@@ -29,7 +34,7 @@ jobs:
         run: |
           node ./scripts/sync-issues.js
 
-      - name: Commit generated posts
+      - name: Commit synced bases
         env:
           PAT: ${{ secrets.GH_PAT }}
           DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
@@ -37,13 +42,13 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          git add src/data/posts || true
+          git add src/content || true
           if git diff --cached --quiet; then
             echo "No changes to commit"
             exit 0
           fi
 
-          git commit -m "chore: sync contentPost issues to src/data/posts"
+          git commit -m "chore: sync base issues to src/content/bases"
           git remote set-url origin https://x-access-token:${PAT}@github.com/${{ github.repository }}.git
 
           git fetch --no-tags --prune origin $DEFAULT_BRANCH

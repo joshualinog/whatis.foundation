@@ -5,14 +5,18 @@
   "scripts": {
     "build:css": "postcss src/styles.css -o docs/styles.css",
     "build:eleventy": "eleventy --input=src --output=docs",
-    "build": "npm run build:css && npm run build:eleventy",
-    "dev": "npm run build && eleventy --input=src --output=docs --serve"
+    "build": "npm run validate && npm run build:css && npm run build:eleventy",
+    "dev": "npm run build && eleventy --input=src --output=docs --serve",
+    "validate": "node scripts/validate-bases.js",
+    "sync": "node scripts/sync-issues.js"
   },
   "devDependencies": {
     "@11ty/eleventy": "^2.0.0",
     "autoprefixer": "^10.4.19",
+    "markdown-it": "^13.0.2",
     "postcss": "^8.4.35",
     "postcss-cli": "^10.1.0",
-    "tailwindcss": "^3.4.4"
+    "tailwindcss": "^3.4.4",
+    "zod": "^3.25.76"
   }
 }
