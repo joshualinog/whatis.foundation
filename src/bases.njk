@@ -24,8 +24,7 @@ eleventyComputed:
     <p class="text-sm font-semibold uppercase tracking-[0.35em] {{ base.accent.label if base.accent else 'text-slate-200' }}">
       Base {{ base.number }}{% if base.special %} · {{ base.special.role }}{% endif %}{% if base.space %} · Space {{ base.space.number }} · {{ base.space.name }}{% endif %}
     </p>
-    <h1 class="mt-3 text-4xl font-semibold leading-tight sm:text-5xl">{{ base.headline }}</h1>
-    {% if base.subtitle %}<p class="mt-4 text-lg leading-8 text-white/90">{{ base.subtitle }}</p>{% endif %}
+    <h1 class="mt-3 text-3xl font-semibold leading-tight sm:text-4xl">{{ base.long_title }}</h1>
   </header>
 
   {% set doc = base %}{% set body = base.base_body %}{% set has_content = base.has_content %}{% set fallback_note = base.special.note if base.special else "" %}
