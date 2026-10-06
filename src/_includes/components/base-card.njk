@@ -6,7 +6,7 @@
       Base {{ base.number }}{% if base.special %} · {{ base.special.role }}{% elif base.space %} · {{ base.space.name }}{% endif %}
     </p>
     <h3 class="mt-2 text-lg font-semibold leading-snug text-white">
-      <a href="{{ base.url }}" class="after:absolute after:inset-0 after:content-[''] focus:outline-none">{{ base.headline }}</a>
+      <a href="{{ base.url }}" class="after:absolute after:inset-0 after:content-[''] focus:outline-none">{{ base.long_title }}</a>
     </h3>
   </header>
 
@@ -21,8 +21,6 @@
     <p class="text-sm font-medium leading-6 text-slate-800">{{ base.short_description }}</p>
     {% elif base.special %}
     <p class="text-sm leading-6 text-slate-600">{{ base.special.note }}</p>
-    {% elif base.subtitle %}
-    <p class="line-clamp-4 text-sm leading-6 text-slate-600">{{ base.subtitle }}</p>
     {% endif %}
   </div>
 
