@@ -28,7 +28,7 @@ eleventyComputed:
   </header>
 
   {% set doc = base %}{% set body = base.base_body %}{% set has_content = base.has_content %}{% set fallback_note = base.special.note if base.special else "" %}
-  {% include "components/content-sections.njk" %}
+  {% include "components/base-content.njk" %}
 
   <nav aria-label="Previous and next base" class="mt-16 grid gap-4 sm:grid-cols-2">
     {% if prev %}<a href="{{ prev.url }}" rel="prev" class="rounded-2xl border border-slate-200 bg-white p-4 transition hover:border-brand-300"><span class="text-xs uppercase tracking-[0.25em] text-slate-400">← Base {{ prev.number }}</span><span class="mt-1 block font-semibold text-slate-900">{{ prev.headline }}</span></a>{% else %}<span></span>{% endif %}

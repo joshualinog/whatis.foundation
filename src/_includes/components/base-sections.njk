@@ -1,7 +1,12 @@
-{# Titled section wrapper used on base pages: {% call section(id, heading) %}…{% endcall %} #}
-{% macro section(id, heading) %}
-<section id="{{ id }}" aria-labelledby="{{ id }}-heading" class="mt-12">
-  <h2 id="{{ id }}-heading" class="mb-4 text-2xl font-semibold text-slate-900">{{ heading }}</h2>
+{# Titled section wrapper: {% call section(id, heading) %}…{% endcall %}. With sub=true it is a subheading (h3) inside a group. #}
+{% macro section(id, heading, sub=false) %}
+<section id="{{ id }}" aria-labelledby="{{ id }}-heading" class="{{ 'mt-8' if sub else 'mt-12' }}">
+  {% if sub %}<h3 id="{{ id }}-heading" class="mb-3 text-xl font-semibold text-slate-900">{{ heading }}</h3>
+  {% else %}<h2 id="{{ id }}-heading" class="mb-4 text-2xl font-semibold text-slate-900">{{ heading }}</h2>{% endif %}
   {{ caller() }}
 </section>
+{% endmacro %}
+
+{% macro soon() %}
+<p class="mt-6 rounded-2xl border border-dashed border-slate-300 bg-white p-6 text-center text-slate-500">Content coming soon.</p>
 {% endmacro %}
