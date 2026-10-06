@@ -20,11 +20,11 @@
   "board_game_content": [],
   "childrens_content": [],
   "base_sketch": [],
-  "base_body": "<!-- base:long_title> God is light, light is love, being light </base:long_title>",
+  "base_body": "<!-- base:long_title --> God is light, light is love, being light <!-- /base:long_title -->",
   "type": "base",
   "issue": {
     "number": 83,
     "url": "https://github.com/joshualinog/whatis.foundation/issues/83",
-    "updated_at": "2026-10-06T15:34:44Z"
+    "updated_at": "2026-10-06T15:39:52Z"
   }
 }
