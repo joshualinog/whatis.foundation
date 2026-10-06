@@ -1,5 +1,6 @@
 {
   "title": "God is Light, Light is Love, Being Light",
+  "long_title": "God is light, light is love, being light",
   "number": 1,
   "part_parent": 1,
   "short_description": "",
@@ -20,7 +21,7 @@
   "board_game_content": [],
   "childrens_content": [],
   "base_sketch": [],
-  "base_body": "<!-- base:long_title --> God is light, light is love, being light <!-- /base:long_title -->",
+  "base_body": "",
   "type": "base",
   "issue": {
     "number": 83,
