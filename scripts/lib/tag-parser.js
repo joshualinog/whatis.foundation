@@ -40,7 +40,7 @@ const ATTR = /([A-Za-z_][\w-]*)(?:\s*=\s*(?:"([^"]*)"|'([^']*)'))?/g;
 
 const NUMERIC_ATTRS = new Set(['order', 'order_parent', 'number', 'part_parent']);
 const BOOLEAN_ATTRS = new Set(['essential', 'main_image', 'main_video']);
-const LIST_ATTRS = new Set(['image_urls', 'video_urls', 'audio_urls', 'track_urls', 'references', 'images']);
+const LIST_ATTRS = new Set(['base_prop_refs', 'image_urls', 'video_urls', 'audio_urls', 'track_urls', 'references', 'images']);
 
 const fieldName = name => String(name).toLowerCase().replace(/-/g, '_');
 
@@ -375,7 +375,8 @@ function buildOutline(items) {
   const pending = [];
   items.forEach(item => {
     if (isSublink(item.alias)) {
-      const sub = withText(pick(item.attrs, ['order', 'order_parent', 'notes']), 'text', item);
+      const sub = withText(pick(item.attrs, ['order', 'order_parent', 'notes', 'base_prop_refs']), 'text', item);
+      if (sub.base_prop_refs === undefined && item.attrs.base_property_references !== undefined) sub.base_prop_refs = item.attrs.base_property_references;
       pending.push({ sub, previous: links[links.length - 1] });
       return;
     }

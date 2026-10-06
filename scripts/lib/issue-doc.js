@@ -1,6 +1,7 @@
 'use strict';
 
 const { parseDocText } = require('./tag-parser');
+const { refWarnings } = require('./base-refs');
 const { DOC_TYPES, expectedPart, formatZodError } = require('./schema');
 const baseTitles = require('../../src/data/base-titles.json');
 const defaults = require('../../src/content/course-defaults');
@@ -97,6 +98,8 @@ function parseIssue(issue) {
   if (type === 'base' && typeof raw.part_parent === 'number' && expectedPart(raw.number) !== raw.part_parent) {
     warnings.push(`part_parent ${raw.part_parent} does not match the part base ${raw.number} belongs to`);
   }
+
+  if (type === 'base') warnings.push(...refWarnings(result.data));
 
   const doc = {
     ...result.data,

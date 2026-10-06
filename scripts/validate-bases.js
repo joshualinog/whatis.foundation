@@ -86,6 +86,20 @@ Second.
   assert.strictEqual(merged.text, 'First.\n\nSecond.');
   assert.strictEqual(merged.image_urls, 'https://a.io/1.png,https://a.io/2.png');
 });
+check('outline sublink base_prop_refs', () => {
+  const body = `<!-- block:scripture_list --><!-- item:scripture ref="John 1:5" -->God is light.<!-- /item:scripture --><!-- /block:scripture_list -->
+<!-- block:concept_lexicon --><!-- item:concept_entry term="Light" -->d<!-- /item:concept_entry --><!-- /block:concept_lexicon -->
+<!-- block:outline_chain -->
+<!-- item:link order="1" -->Intro<!-- /item:link -->
+<!-- item:sublink order="1" order_parent="1" base_prop_refs="scripture:John 1:5, concept_entry:light, scripture:1, image:2, nope" -->Read<!-- /item:sublink -->
+<!-- /block:outline_chain -->`;
+  const { doc, errors, warnings } = parse('Base 2', body);
+  assert(doc, errors.join('; '));
+  const sub = doc.outline_chain[0].sublinks[0];
+  assert.deepStrictEqual(sub.base_prop_refs, ['scripture:John 1:5', 'concept_entry:light', 'scripture:1', 'image:2', 'nope']);
+  assert.strictEqual(warnings.length, 2, warnings.join(' | '));
+  assert(/image has 0|images has 0/.test(warnings[0]) && /unknown type/.test(warnings[1]), warnings.join(' | '));
+});
 check('concept entry', () => {
   const { doc, errors } = parse('Base 2', `<!-- block:concept_lexicon -->
 <!-- item:concept_entry term="Light" image="https://x.io/a.png" references="Base 02, Base 05" -->

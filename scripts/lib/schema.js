@@ -85,6 +85,8 @@ const OutlineSublinkSchema = z.object({
   order: z.number(),
   order_parent: z.number().optional(),
   notes: z.string().optional(),
+  // References to other items in the same base, e.g. "scripture:John 1:5" (see base-refs.js).
+  base_prop_refs: commaSeparatedStrings,
   text: z.string(),
 });
 

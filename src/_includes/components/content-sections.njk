@@ -79,6 +79,7 @@
           <li>
             <p class="text-slate-700">{{ sub.text }}</p>
             {% if sub.notes %}<p class="whitespace-pre-line text-sm text-slate-500">{{ sub.notes }}</p>{% endif %}
+            {% if sub.base_prop_refs.length %}<ul class="mt-1 flex flex-wrap gap-2">{% for ref in sub.base_prop_refs %}<li class="rounded-full bg-slate-100 px-2.5 py-0.5 text-xs text-slate-600">{{ ref }}</li>{% endfor %}</ul>{% endif %}
           </li>
           {% endfor %}
         </ol>

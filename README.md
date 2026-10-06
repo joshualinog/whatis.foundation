@@ -82,6 +82,8 @@ Written out **by hand**, visible on GitHub.
 
 **What can be left out.** The issue itself already says what it is, so `meta:TYPE` and `number` are optional: the type comes from the label, the number from a title like "Base 30 — …", `part_parent` from the number, and `title` from the canonical title list. An issue body can be just handwriting plus the tags you need.
 
+**Outline references.** An `item:sublink` can point at other items in the same base with `base_prop_refs` (also spelled `base_property_references`): a comma-separated list of `type` or `type:selector`, e.g. `base_prop_refs="mind_movie:1, scripture:John 1:5, concept_entry:Light, image:2, hand_gisture:Menorah"`. `type` is a base field (`scripture_list`, `concept_lexicon`, `hand_gistures`…) or its singular (`scripture`, `concept_entry`, `image`, `video`, `practice`, `mind_movie`, `hand_gisture`…); `selector` is a 1-based position or the item's key text (scripture ref, concept term, practice/gesture name, resource title). Repeat a type to point at several items. A reference that matches nothing in the base is reported as a sync warning, and the page shows the references under their sublink.
+
 **Pass 2 — body.** Everything that is not a tag (markdown, pasted handwriting images) becomes the freeform body (`base_body`, `part_body`, `division_body` or `overview_body`), shown as *Notes* on the page. A `<!-- block:part-body -->` (or `base-body`, `division-body`, `overview-body`, plain `body`) block is the same thing written explicitly. Raw HTML in it is not rendered.
 
 **Meta attributes**
