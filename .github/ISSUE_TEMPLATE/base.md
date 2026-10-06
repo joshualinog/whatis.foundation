@@ -6,8 +6,6 @@ labels: ["FOUNDATION COURSE COMPONENT", "FOUNDATION BASE"]
 ---
 <!-- meta:base
   title=""
-  short_description=""
-  long_description=""
   google_docs_url=""
   google_slides_url=""
   number=""
@@ -15,6 +13,12 @@ labels: ["FOUNDATION COURSE COMPONENT", "FOUNDATION BASE"]
   booklet_chapter_url=""
   childrens_book_url=""
 -->
+
+<!-- base:long_title --><!-- /base:long_title -->
+
+<!-- base:short_description --><!-- /base:short_description -->
+
+<!-- base:long_description --><!-- /base:long_description -->
 
 <!-- block:images -->
 <!-- /block:images -->

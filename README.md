@@ -65,13 +65,30 @@ Notes / text.
 <!-- /block:board_game_content -->
 ```
 
+**Visible fields.** Everything inside a `<!-- … -->` is hidden on GitHub, so a value you want to read in the issue goes in a field: `<!-- field:NAME -->text<!-- /field:NAME -->`. The text between the tags is the value (markdown is fine) and shows in the rendered issue. `NAME` is any scalar meta attribute (`short_description`, `long_description`, `google_docs_url`, …). The type can stand in for `field`, so `<!-- base:long_title -->…<!-- /base:long_title -->` means the same thing. A field wins over the same attribute on the `meta` tag, and is not repeated in the freeform body.
+
+**Long title.** `long_title` is the full handwritten title of a base (the ones in issue #184), so it never has to fit in a GitHub issue title. It is its own field, separate from `title`: `title` defaults to the issue title without its "Base N —" prefix, and `long_title` defaults to the canonical title. Write it as a visible field, not in the meta tag:
+
+```html
+<!-- base:long_title -->God is Light, Light is Love, Being Light<!-- /base:long_title -->
+<!-- base:long_description -->
+Written out **by hand**, visible on GitHub.
+<!-- /base:long_description -->
+```
+
+`node scripts/set-base-titles.js [--apply]` writes the `long_title` field into every base issue whose body is still empty, generated or title-only (dry run without `--apply`; needs `gh auth login`).
+
+**Writing the same thing twice.** An issue can grow over several sittings, so repeats add up instead of overwriting. Repeated `block:` tags and their items accumulate in the order written; items that share an explicit `order` are merged (bodies joined). Repeated `short_description` / `long_description` (as fields or attributes) are joined with a blank line in order of occurrence, and freeform text outside any tag is kept in order. Single-valued fields (`title`, `number`, urls…) keep one value, the first written (a `field` beats a `meta` attribute), and a conflicting second value is reported as a sync warning.
+
+**What can be left out.** The issue itself already says what it is, so `meta:TYPE` and `number` are optional: the type comes from the label, the number from a title like "Base 30 — …", `part_parent` from the number, and `title` from the canonical title list. An issue body can be just handwriting plus the tags you need.
+
 **Pass 2 — body.** Everything that is not a tag (markdown, pasted handwriting images) becomes the freeform body (`base_body`, `part_body`, `division_body` or `overview_body`), shown as *Notes* on the page. A `<!-- block:part-body -->` (or `base-body`, `division-body`, `overview-body`, plain `body`) block is the same thing written explicitly. Raw HTML in it is not rendered.
 
 **Meta attributes**
 
 | Type | Attributes |
 |---|---|
-| `meta:base` | `title number part_parent short_description long_description google_docs_url google_slides_url booklet_chapter_url childrens_book_url` |
+| `meta:base` | `title long_title number part_parent short_description long_description google_docs_url google_slides_url booklet_chapter_url childrens_book_url` |
 | `meta:part` / `meta:division` | `title number short_description long_description google_docs_url google_slides_url` |
 | `meta:overview` | `title short_description long_description google_docs_url google_slides_url` |
 

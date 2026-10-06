@@ -6,11 +6,13 @@ labels: ["FOUNDATION COURSE COMPONENT", "FOUNDATION COURSE OVERVIEW"]
 ---
 <!-- meta:overview
   title=""
-  short_description=""
-  long_description=""
   google_docs_url=""
   google_slides_url=""
 -->
+
+<!-- overview:short_description --><!-- /overview:short_description -->
+
+<!-- overview:long_description --><!-- /overview:long_description -->
 
 <!-- block:images -->
 <!-- /block:images -->

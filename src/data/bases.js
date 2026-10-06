@@ -37,11 +37,12 @@ module.exports = function () {
     const defaults = BaseSchema.parse({ title: canonicalTitle, number, part_parent: expectedPart(number) });
     const base = { ...defaults, ...content };
 
-    base.title = content.title || canonicalTitle;
+    base.long_title = content.long_title || canonicalTitle;
     base.part_parent = content.part_parent || expectedPart(number);
     base.issue = content.issue || null;
 
-    const { headline, subtitle, space } = splitTitle(base.title);
+    const { headline, subtitle, space } = splitTitle(base.long_title);
+    base.title = content.title || headline;
     base.headline = headline;
     base.subtitle = subtitle;
     base.kind = kindOf(number);

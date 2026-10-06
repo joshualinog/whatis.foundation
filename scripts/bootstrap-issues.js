@@ -74,7 +74,7 @@ function planIssues() {
     bases
       .filter(b => b.number >= START)
       .forEach(b =>
-        plan.push(buildIssue('base', { title: b.title, number: b.number, part_parent: b.part_parent }, `Base ${b.number} — ${b.headline}`))
+        plan.push(buildIssue('base', { title: b.headline, long_title: b.long_title, number: b.number, part_parent: b.part_parent }, `Base ${b.number} — ${b.headline}`))
       );
   }
   if (ONLY !== 'bases' && START === 0) {

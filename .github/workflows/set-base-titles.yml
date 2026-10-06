@@ -1,0 +1,31 @@
+name: Write long titles into base issues
+
+permissions:
+  contents: read
+  issues: write
+
+on:
+  workflow_dispatch:
+    inputs:
+      apply:
+        description: 'Write the changes (leave off for a dry run)'
+        type: boolean
+        default: false
+
+jobs:
+  set-base-titles:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - name: Write <!-- base:long_title --> into each base issue
+        run: node ./scripts/set-base-titles.js ${{ inputs.apply && '--apply' || '' }}

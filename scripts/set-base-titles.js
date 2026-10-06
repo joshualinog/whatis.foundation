@@ -5,10 +5,12 @@
  * scripts/set-base-titles.js
  *
  * Writes each base's full title (from issue #184, src/data/base-titles.json) into its issue as
+ * visible text:
  *
- *   <!-- meta:base title="FULL TITLE"--><!--/meta:base-->
+ *   <!-- base:long_title -->FULL TITLE<!-- /base:long_title -->
  *
- * Only empty or still-generated bodies are replaced. A body with anything of yours in it is left
+ * Only bodies that hold nothing but a title (empty, a generated skeleton, or the older
+ * <!-- meta:base title="…"--> form) are replaced. A body with anything else of yours in it is left
  * alone and listed. Dry run unless you pass --apply.
  *
  *   node scripts/set-base-titles.js [--apply]
@@ -16,18 +18,20 @@
 
 const { expectedPart } = require('./lib/schema');
 const bases = require('../src/data/base-titles.json').map(({ number, title }) => ({ number, title, part_parent: expectedPart(number) }));
-const { buildTemplate, buildTitleOnly } = require('./lib/base-template');
+const { buildTitleOnly } = require('./lib/base-template');
+const { parseDocText } = require('./lib/tag-parser');
 const { apiCall, fetchIssuesByLabel, sleep, OWNER, REPO } = require('./lib/gh');
 
 const APPLY = process.argv.includes('--apply');
 const norm = s => (s || '').replace(/\r\n/g, '\n').trim();
-// the title line differs per body, so compare everything else
-const withoutTitle = s => norm(s).replace(/title="[^\n]*"/, 'title=""');
 
-function isGenerated(body, base) {
+// Generated or title-only: the parser finds no blocks, no freeform text and no scalar but the titles.
+const TITLE_ONLY_FIELDS = new Set(['title', 'long_title', 'number', 'part_parent', 'base_body']);
+function isGenerated(body) {
   if (!norm(body)) return true;
-  const skeleton = buildTemplate('base', { title: base.title, number: base.number, part_parent: base.part_parent });
-  return withoutTitle(body) === withoutTitle(skeleton);
+  const { raw, errors, written } = parseDocText(body);
+  if (errors.length || (written && written !== 'base')) return false;
+  return Object.entries(raw).every(([key, value]) => (TITLE_ONLY_FIELDS.has(key) ? key !== 'base_body' || value === '' : Array.isArray(value) ? value.length === 0 : false));
 }
 
 function main() {
@@ -41,7 +45,7 @@ function main() {
     if (!base) return kept.push(`#${issue.number} "${issue.title}" — not a recognised base title`);
     const body = buildTitleOnly(base.title);
     if (norm(issue.body) === body) return;
-    if (!isGenerated(issue.body, base)) return kept.push(`#${issue.number} Base ${base.number} — has your own content, left alone`);
+    if (!isGenerated(issue.body)) return kept.push(`#${issue.number} Base ${base.number} — has your own content, left alone`);
     plan.push({ issue, base, body });
   });
 

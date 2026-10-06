@@ -182,6 +182,7 @@ const contentArrays = {
 const BaseSchema = z
   .object({
     title: z.string(),
+    long_title: z.string().default(''),
     number: z.number().int().min(BASE_MIN).max(BASE_MAX),
     part_parent: z.number().int().min(1).max(5).optional(),
     short_description: z.string().default(''),
@@ -239,7 +240,7 @@ const COMMON_META = ['title', 'short_description', 'long_description', 'google_d
 const DOC_TYPES = {
   base: {
     schema: BaseSchema,
-    meta: [...COMMON_META, 'number', 'part_parent', 'booklet_chapter_url', 'childrens_book_url'],
+    meta: [...COMMON_META, 'long_title', 'number', 'part_parent', 'booklet_chapter_url', 'childrens_book_url'],
     blocks: Object.keys(contentArrays),
     body: 'base_body',
     labels: ['FOUNDATION BASE', 'FOUNDATION MEETING'],

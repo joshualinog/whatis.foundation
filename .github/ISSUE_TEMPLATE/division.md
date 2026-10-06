@@ -6,12 +6,14 @@ labels: ["FOUNDATION COURSE COMPONENT", "FOUNDATION DIVISION"]
 ---
 <!-- meta:division
   title=""
-  short_description=""
-  long_description=""
   google_docs_url=""
   google_slides_url=""
   number=""
 -->
+
+<!-- division:short_description --><!-- /division:short_description -->
+
+<!-- division:long_description --><!-- /division:long_description -->
 
 <!-- block:images -->
 <!-- /block:images -->

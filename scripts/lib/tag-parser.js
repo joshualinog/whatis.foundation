@@ -17,18 +17,39 @@
 //   <!-- /item:game -->
 //   <!-- /block:board_game_content -->
 //
+// Anything inside <!-- … --> is invisible on GitHub, so a long value is better
+// written as a visible field. The text between the tags is the value and shows
+// up in the rendered issue. `long_title` is the full handwritten title; it is
+// its own field, apart from `title` (which defaults to the issue's title) so a
+// long title never has to fit in a GitHub issue title:
+//
+//   <!-- field:long_title -->God is Light, Light is Love, Being Light<!-- /field:long_title -->
+//   (<!-- base:long_title -->…<!-- /base:long_title --> is the same thing; base: part: division: overview: all work as field:)
+//   <!-- field:long_description -->
+//   Any **markdown** you like.
+//   <!-- /field:long_description -->
+//
 // Pass 1 extracts the tags into a plain object (before Zod validation).
 // Pass 2 treats everything that is not a tag as the freeform base_body.
 // Inside a known block any `item:*` alias is accepted (item:game, item:activity…).
 
 const { BLOCK_FIELDS, DOC_TYPES, resolveType } = require('./schema');
 
-const TAG = /<!--\s*(\/)?\s*(meta|block|item)\b(?::([A-Za-z0-9_-]+))?([\s\S]*?)-->/g;
+const TAG = /<!--\s*(\/)?\s*(meta|block|item|field|base|part|division|overview)\b(?::([A-Za-z0-9_-]+))?([\s\S]*?)-->/g;
 const ATTR = /([A-Za-z_][\w-]*)(?:\s*=\s*(?:"([^"]*)"|'([^']*)'))?/g;
 
 const NUMERIC_ATTRS = new Set(['order', 'order_parent', 'number', 'part_parent']);
 const BOOLEAN_ATTRS = new Set(['essential', 'main_image', 'main_video']);
 const LIST_ATTRS = new Set(['image_urls', 'video_urls', 'audio_urls', 'track_urls', 'references', 'images']);
+
+const fieldName = name => String(name).toLowerCase().replace(/-/g, '_');
+
+function coerce(key, value) {
+  if (key === 'title' || key === 'long_title') return value.replace(/\s+/g, ' ');
+  if (NUMERIC_ATTRS.has(key) && /^-?\d+(\.\d+)?$/.test(value)) return Number(value);
+  if (BOOLEAN_ATTRS.has(key)) return !/^(false|no|0)$/i.test(value);
+  return value;
+}
 
 function parseAttributes(source) {
   const attrs = {};
@@ -41,9 +62,7 @@ function parseAttributes(source) {
     // &lt; &gt; &quot; let a value hold characters that would end the tag (a literal "-->" closes the comment)
     value = value.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&amp;/g, '&').trim();
     if (value === '') continue;
-    if (NUMERIC_ATTRS.has(key) && /^-?\d+(\.\d+)?$/.test(value)) value = Number(value);
-    else if (BOOLEAN_ATTRS.has(key)) value = !/^(false|no|0)$/i.test(value);
-    attrs[key] = value;
+    attrs[key] = coerce(key, value);
   }
   return attrs;
 }
@@ -54,7 +73,8 @@ function tokenize(text) {
   TAG.lastIndex = 0;
   while ((m = TAG.exec(text)) !== null) {
     tokens.push({
-      kind: m[2],
+      // <!-- base:long_title --> reads as <!-- field:long_title -->
+      kind: /^(?:base|part|division|overview)$/.test(m[2]) ? 'field' : m[2],
       closing: Boolean(m[1]),
       name: m[3] || '',
       source: m[4],
@@ -69,11 +89,39 @@ function tokenize(text) {
 // Its text stays in the document body; only the tags themselves are removed.
 const BODY_BLOCK = /^(?:(?:base|part|division|overview|course)[-_])?body$/i;
 
+// Free text keeps growing: writing short_description or long_description again
+// appends to it, in the order the pieces occur. A single-valued field (title,
+// number, a url…) keeps one value: a hand-written <!-- field --> beats a meta
+// attribute, otherwise the first one written wins, and a different second
+// value is reported rather than silently dropped.
+const APPENDING = new Set(['short_description', 'long_description']);
+
+function resolveScalars(found, warnings) {
+  const byKey = new Map();
+  found.forEach(entry => {
+    if (!byKey.has(entry.key)) byKey.set(entry.key, []);
+    byKey.get(entry.key).push(entry);
+  });
+  const meta = {};
+  byKey.forEach((entries, key) => {
+    if (APPENDING.has(key)) {
+      meta[key] = entries.map(e => e.value).join('\n\n');
+      return;
+    }
+    const chosen = entries.find(e => e.field) || entries[0];
+    meta[key] = chosen.value;
+    if (entries.some(e => e.value !== chosen.value)) {
+      warnings.push(`${key} is written more than once with different values (using ${JSON.stringify(String(chosen.value))})`);
+    }
+  });
+  return meta;
+}
+
 // Pass 1: tags → { types, meta, blocks, ranges }. `ranges` are removed for pass 2.
 function extractTags(text, warnings, errors) {
   const tokens = tokenize(text);
   const types = [];
-  const meta = {};
+  const found = []; // every scalar value in order of occurrence: { key, value, field }
   const blocks = {};
   const ranges = [];
   let block = null;
@@ -113,8 +161,28 @@ function extractTags(text, warnings, errors) {
         openMeta = type;
       }
       Object.entries(attrs).forEach(([key, value]) => {
-        if (meta[key] === undefined) meta[key] = value;
+        const field = fieldName(key);
+        found.push({ key: field, value, field: false });
       });
+      continue;
+    }
+
+    if (t.kind === 'field') {
+      ranges.push([t.start, t.end]);
+      if (t.closing) {
+        warnings.push(`stray <!-- /field:${t.name} -->`);
+        continue;
+      }
+      const next = tokens[i + 1];
+      if (!t.name || !next || next.kind !== 'field' || !next.closing || next.name !== t.name) {
+        warnings.push(`<!-- field${t.name ? ':' + t.name : ''} --> needs a matching <!-- /field${t.name ? ':' + t.name : ''} -->`);
+        continue;
+      }
+      const value = text.slice(t.end, next.start).trim();
+      ranges.push([t.end, next.end]);
+      i += 1;
+      const field = fieldName(t.name);
+      if (value !== '') found.push({ key: field, value: coerce(field, value), field: true });
       continue;
     }
 
@@ -161,6 +229,7 @@ function extractTags(text, warnings, errors) {
 
   if (block) warnings.push(`block:${block.name} was never closed`);
   if (openMeta) warnings.push(`meta:${openMeta} was never closed`);
+  const meta = resolveScalars(found, warnings);
   return { types, meta, blocks, ranges };
 }
 

@@ -58,7 +58,7 @@ const baseByNumber = new Map(bases.map(b => [b.number, b]));
 const newBaseNumber = old => (old <= 29 ? old : old + 1);
 
 const targets = {
-  base: n => ({ title: `Base ${n} — ${baseByNumber.get(n).headline}`, values: { title: baseByNumber.get(n).title, number: n, part_parent: baseByNumber.get(n).part_parent } }),
+  base: n => ({ title: `Base ${n} — ${baseByNumber.get(n).headline}`, values: { title: baseByNumber.get(n).headline, long_title: baseByNumber.get(n).long_title, number: n, part_parent: baseByNumber.get(n).part_parent } }),
   part: n => {
     const p = course.parts.find(x => x.number === n);
     return { title: `Part ${n} — ${p.title}`, values: { title: p.title, number: n, short_description: p.overview } };

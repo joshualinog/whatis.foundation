@@ -46,18 +46,19 @@ check('template for overview', () => skeleton('overview', undefined, 'Course ove
 
 // titles can hold characters that would end a tag, such as "-->" in base 30
 titles.forEach(t => check(`title round trip for base ${t.number}`, () => {
-  const { doc, errors } = parse(`Base ${t.number}`, buildTemplate('base', { number: t.number, title: t.title }), 'FOUNDATION BASE');
+  const { doc, errors } = parse(`Base ${t.number}`, buildTemplate('base', { number: t.number, long_title: t.title }), 'FOUNDATION BASE');
   assert(doc, errors.join('; '));
-  assert.strictEqual(doc.title, t.title.replace(/\s+/g, ' ').trim());
+  assert.strictEqual(doc.long_title, t.title.replace(/\s+/g, ' ').trim());
 }));
 
 // the compact form written into every base issue: just the full title
 titles.forEach(t => check(`compact title for base ${t.number}`, () => {
   const body = buildTitleOnly(t.title);
-  assert(/^<!-- meta:base title="[^\n]*"--><!--\/meta:base-->$/.test(body), 'unexpected shape');
-  const { doc, errors } = parse(`Base ${t.number}`, body, 'FOUNDATION BASE');
+  assert(/^<!-- base:long_title -->[^\n]*<!-- \/base:long_title -->$/.test(body), 'unexpected shape');
+  const { doc, errors } = parse(`Base ${t.number} — Short`, body, 'FOUNDATION BASE');
   assert(doc, errors.join('; '));
-  assert.strictEqual(doc.title, t.title.replace(/\s+/g, ' ').trim());
+  assert.strictEqual(doc.long_title, t.title.replace(/\s+/g, ' ').trim());
+  assert.strictEqual(doc.title, 'Short');
   assert.strictEqual(doc.number, t.number);
 }));
 

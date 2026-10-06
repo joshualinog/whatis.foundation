@@ -14,6 +14,18 @@ const TITLE_NUMBER = {
   division: /^\s*(?:main\s+)?division\s+(\d+)\b/i,
 };
 
+// "Base 8 — WH1 — Who" → "WH1 — Who": the issue title without its "Base N —" prefix.
+const TITLE_PREFIX = {
+  base: /^\s*base\s+\d+\s*[—–:-]?\s*/i,
+  part: /^\s*part\s+\d+\s*[—–:-]?\s*/i,
+  division: /^\s*(?:main\s+)?division\s+\d+\s*[—–:-]?\s*/i,
+};
+
+function issueTitleText(type, issueTitle) {
+  const rule = TITLE_PREFIX[type];
+  return String(issueTitle || '').replace(rule || /^$/, '').replace(/\s+/g, ' ').trim();
+}
+
 function defaultTitle(type, number) {
   if (type === 'base') return BASE_TITLE.get(number);
   if (type === 'part') return (defaults.parts.find(p => p.number === number) || {}).title;
@@ -39,7 +51,8 @@ function typeFromLabels(labels) {
  * pasted part can never overwrite a base.
  *
  * Omitted fields fall back sensibly: the number comes from a title such as
- * "Base 5" / "Part 2", the title from the canonical one, `part_parent` from
+ * "Base 5" / "Part 2", the title from the issue title (without its "Base N —" prefix), the long title
+ * from the canonical one, `part_parent` from
  * the base number.
  *
  * @param {{title?: string, body?: string, number?: number, html_url?: string, updated_at?: string, labels?: any[]}} issue
@@ -64,9 +77,14 @@ function parseIssue(issue) {
       if (part !== undefined) raw.part_parent = part;
     }
   }
+  // The issue's own title is the short title; the canonical full one is long_title.
   if (raw.title === undefined) {
-    const title = defaultTitle(type, raw.number);
+    const title = (TITLE_PREFIX[type] && issueTitleText(type, issue.title)) || defaultTitle(type, raw.number);
     if (title) raw.title = title;
+  }
+  if (type === 'base' && raw.long_title === undefined) {
+    const longTitle = defaultTitle(type, raw.number);
+    if (longTitle) raw.long_title = longTitle;
   }
   if (type !== 'overview' && raw.number === undefined) {
     const hint = TITLE_NUMBER[type] ? ` or start the issue title with "${type[0].toUpperCase() + type.slice(1)} <number>"` : '';
