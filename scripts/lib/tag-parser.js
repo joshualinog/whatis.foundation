@@ -233,6 +233,11 @@ function extractTags(text, warnings, errors) {
     (blocks[block.name] = blocks[block.name] || []).push({ alias: t.name, attrs: parseAttributes(t.source), body });
   }
 
+  // A final "<!--" with no "-->" after it hides everything below it.
+  const lastOpen = text.lastIndexOf('<!--');
+  if (lastOpen !== -1 && lastOpen > text.lastIndexOf('-->')) {
+    warnings.push(`a comment starting "${text.slice(lastOpen, lastOpen + 40).replace(/\s+/g, ' ').trim()}" is never closed with "-->", so everything after it is hidden`);
+  }
   if (block) warnings.push(`block:${block.name} was never closed`);
   if (openMeta) warnings.push(`meta:${openMeta} was never closed`);
   const meta = resolveScalars(found, warnings);
