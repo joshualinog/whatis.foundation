@@ -1,42 +1,41 @@
-{# Base page body, in the order of the handwritten "Base page layout". Expects: doc, body, fallback_note #}
+{# Base page body, in the order of the handwritten "Base page layout". Expects: doc, body, fallback_note.
+   Every property gets a small label, and "Content coming soon" under it when empty. #}
 {% import "components/base-properties.njk" as p %}
-{% from "components/base-sections.njk" import soon %}
+{% from "components/base-sections.njk" import prop %}
 
 {# Landing: no group heading, the long title above is the heading #}
-{{ p.descriptionShort(doc, fallback_note) }}
-{{ p.outline(doc) }}
-{{ p.lexicon(doc) }}
-{{ p.scriptures(doc) }}
-{{ p.practices(doc) }}
-{{ p.mindMovies(doc) }}
-{{ p.images(doc) }}
-{{ p.videos(doc) }}
-{{ p.descriptionLong(doc) }}
-{{ p.notes(body) }}
+{% call prop('short-description', 'Short description') %}{{ p.descriptionShort(doc, fallback_note) }}{% endcall %}
+{% call prop('outline', 'Outline chain') %}{{ p.outline(doc, 'bare') }}{% endcall %}
+{% call prop('lexicon', 'Concept lexicon') %}{{ p.lexicon(doc, 'bare') }}{% endcall %}
+{% call prop('scriptures', 'Scripture list') %}{{ p.scriptures(doc, 'bare') }}{% endcall %}
+{% call prop('practices', 'Practices') %}{{ p.practices(doc, 'bare') }}{% endcall %}
+{% call prop('mind-movies', 'Mind movies') %}{{ p.mindMovies(doc, 'bare') }}{% endcall %}
+{% call prop('images', 'Images') %}{{ p.images(doc) }}{% endcall %}
+{% call prop('videos', 'Videos') %}{{ p.videos(doc) }}{% endcall %}
+{% call prop('long-description', 'Long description') %}{{ p.descriptionLong(doc) }}{% endcall %}
+{% if body %}{% call prop('notes', 'Notes') %}{{ p.notes(body, 'bare') }}{% endcall %}{% endif %}
 
 <section id="teacher-tools" aria-labelledby="teacher-tools-heading" class="mt-16 border-t border-slate-200 pt-2">
   <h2 id="teacher-tools-heading" class="mt-8 text-3xl font-semibold text-slate-900">Teacher tools</h2>
-  {% if doc.google_slides_url or doc.google_docs_url or doc.mishnah_catechesis.length or doc.hand_gistures.length or doc.base_sketch.length %}
-  {{ p.links(doc, [{ url: doc.google_slides_url, label: 'Google Slides' }, { url: doc.google_docs_url, label: 'Google Doc' }]) }}
-  {{ p.catechesis(doc, true) }}
-  {{ p.handGistures(doc, true) }}
-  {{ p.resources(doc, ['base_sketch'], true) }}
-  {% else %}{{ soon() }}{% endif %}
+  {% call prop('google-slides', 'Google Slides') %}{{ p.links(doc, [{ url: doc.google_slides_url, label: 'Google Slides' }]) }}{% endcall %}
+  {% call prop('google-docs', 'Google Docs') %}{{ p.links(doc, [{ url: doc.google_docs_url, label: 'Google Doc' }]) }}{% endcall %}
+  {% call prop('catechesis', 'Mishnah catechesis') %}{{ p.catechesis(doc, 'bare') }}{% endcall %}
+  {% call prop('hand-gistures', 'Hand gistures') %}{{ p.handGistures(doc, 'bare') }}{% endcall %}
+  {% call prop('base-sketch', 'Base sketch') %}{{ p.resources(doc, ['base_sketch'], 'bare') }}{% endcall %}
 </section>
 
 <section id="children" aria-labelledby="children-heading" class="mt-16 border-t border-slate-200 pt-2">
   <h2 id="children-heading" class="mt-8 text-3xl font-semibold text-slate-900">Children</h2>
-  {% if doc.childrens_book_url or doc.block_talk_content.length or doc.childrens_content.length or doc.homeschooling_supporting_content.length %}
-  {{ p.links(doc, [{ url: doc.childrens_book_url, label: 'Children’s book' }]) }}
-  {{ p.resources(doc, ['block_talk_content', 'childrens_content', 'homeschooling_supporting_content'], true) }}
-  {% else %}{{ soon() }}{% endif %}
+  {% call prop('childrens-book', 'Children’s book') %}{{ p.links(doc, [{ url: doc.childrens_book_url, label: 'Children’s book' }]) }}{% endcall %}
+  {% call prop('block-talk-content', 'Block talk content') %}{{ p.resources(doc, ['block_talk_content'], 'bare') }}{% endcall %}
+  {% call prop('childrens-content', 'Children’s content') %}{{ p.resources(doc, ['childrens_content'], 'bare') }}{% endcall %}
+  {% call prop('homeschooling-supporting-content', 'Homeschooling supporting content') %}{{ p.resources(doc, ['homeschooling_supporting_content'], 'bare') }}{% endcall %}
 </section>
 
 <section id="additional" aria-labelledby="additional-heading" class="mt-16 border-t border-slate-200 pt-2">
   <h2 id="additional-heading" class="mt-8 text-3xl font-semibold text-slate-900">Additional</h2>
-  {% if doc.board_game_content.length or doc.booklet_chapter_url or doc.youtube.length or doc.podcast.length %}
-  {{ p.resources(doc, ['board_game_content'], true) }}
-  {{ p.links(doc, [{ url: doc.booklet_chapter_url, label: 'Booklet chapter' }]) }}
-  {{ p.media(doc, true) }}
-  {% else %}{{ soon() }}{% endif %}
+  {% call prop('board-game-content', 'Board game content') %}{{ p.resources(doc, ['board_game_content'], 'bare') }}{% endcall %}
+  {% call prop('booklet-chapter', 'Booklet chapter') %}{{ p.links(doc, [{ url: doc.booklet_chapter_url, label: 'Booklet chapter' }]) }}{% endcall %}
+  {% call prop('youtube', 'YouTube') %}{{ p.youtube(doc, 'bare') }}{% endcall %}
+  {% call prop('podcast', 'Podcast') %}{{ p.podcast(doc, 'bare') }}{% endcall %}
 </section>

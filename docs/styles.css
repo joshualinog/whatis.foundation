@@ -1088,6 +1088,12 @@ video {
   font-size: 3rem;
   line-height: 1;
 }
+.text-\[10px\] {
+  font-size: 10px;
+}
+.text-\[11px\] {
+  font-size: 11px;
+}
 .text-lg {
   font-size: 1.125rem;
   line-height: 1.75rem;
