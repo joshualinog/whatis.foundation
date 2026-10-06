@@ -130,6 +130,12 @@ function extractTags(text, warnings, errors) {
   for (let i = 0; i < tokens.length; i += 1) {
     const t = tokens[i];
 
+    // A tag that forgot its closing "-->" runs on until the next "-->" and swallows what is in between.
+    const swallowed = /<!--|<\//.exec(t.source);
+    if (swallowed) {
+      warnings.push(`<!-- ${t.closing ? '/' : ''}${t.kind}${t.name ? ':' + t.name : ''} …> is missing its closing "-->" (it ran on into "${t.source.slice(swallowed.index).trim().slice(0, 40)}")`);
+    }
+
     if (t.kind === 'meta') {
       ranges.push([t.start, t.end]);
       if (t.closing) {

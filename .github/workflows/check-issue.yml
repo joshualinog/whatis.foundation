@@ -1,0 +1,34 @@
+name: Check issue tags
+
+permissions:
+  contents: read
+  issues: write
+
+on:
+  issues:
+    types: [opened, edited, labeled]
+
+# One check per issue at a time; a newer edit replaces a waiting one.
+concurrency:
+  group: check-issue-${{ github.event.issue.number }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # Passed as an env var, never interpolated into the script.
+      ISSUE_NUMBER: ${{ github.event.issue.number }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - name: Check the issue and comment on problems
+        run: node ./scripts/check-issue.js
