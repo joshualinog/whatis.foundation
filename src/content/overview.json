@@ -11,12 +11,20 @@
   "homeschooling_supporting_content": [],
   "board_game_content": [],
   "childrens_content": [],
-  "overview_sketch": [],
-  "overview_body": "The `outline_chain` property is central to each base[span_1](start_span)[span_1](end_span). The `outline_link` property should be able to stand alone and (potentially) constitute a single meeting/session with a disciple[span_2](start_span)[span_2](end_span). The `outline_sublink` is a node hierarchically beneath this and often will include references to other base properties/fields[span_3](start_span)[span_3](end_span). (e.g. it is reasonable that a `mind_movie` in the `mind_movies` array could itself constitute the majority or all of an `outline_sublink`[span_4](start_span)[span_4](end_span). It is also conceivable that an `outline_sublink` could have multiple base property/field references[span_5](start_span)[span_5](end_span). (e.g. `outline_sublink` could have a multiple `base_property_references`: `concept_entry`, `scripture`, `scripture`, `image`, `image`, `video`, `hand_gisture`[span_6](start_span)[span_6](end_span))",
+  "overview_sketch": [
+    {
+      "title": "The outline chain",
+      "image_urls": [],
+      "video_urls": [],
+      "audio_urls": [],
+      "text": "The `outline_chain` property is central to each base. The `outline_link` property should be able to stand alone and (potentially) constitute a single meeting/session with a disciple. The `outline_sublink` is a node hierarchically beneath this and often will include references to other base properties/fields (e.g. it is reasonable that a `mind_movie` in the `mind_movies` array could itself constitute the majority or all of an `outline_sublink`).\n\nIt is also conceivable that an `outline_sublink` could have multiple base property/field references (e.g. an `outline_sublink` could have multiple `base_prop_refs`: `concept_entry`, `scripture`, `scripture`, `image`, `image`, `video`, `hand_gisture`)."
+    }
+  ],
+  "overview_body": "",
   "type": "overview",
   "issue": {
     "number": 76,
     "url": "https://github.com/joshualinog/whatis.foundation/issues/76",
-    "updated_at": "2026-10-06T17:40:03Z"
+    "updated_at": "2026-10-06T17:46:41Z"
   }
 }
