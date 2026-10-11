@@ -7,7 +7,23 @@
   "long_description": "",
   "images": [],
   "videos": [],
-  "scripture_list": [],
+  "scripture_list": [
+    {
+      "ref": "ISAIAH 6:3",
+      "essential": true,
+      "order": 1,
+      "teacher_notes": [
+        "The three \"holies\" point to the three withs of GOD, being (without, with, within)\nlike the prophet, this is our introduction to God.",
+        "There is also a peculiar connect to the centrality of the concept term GLORY. Each existential, ontological space in the withs has its \"glory\". It is essentially the \"soul\" of that cosm/space. The glory of an individual creation within the set of creation is the soul of that individual, and The spirit of GOD is GOD being the \"soul\" of that soul at the level of \"WITHIN\". That is the ultimate location in the inner experience of that individual creation. The creation also has an outer experience. This would be all other creations alongside this individual creation (including even the entire set of creation itself). The soul/apex of the entire apex of the set of creation enthrones The glory of creation, the glory that is GOD WITH US, God with creation in its outer / other / separate experiences. There is also a space/cosm that is BEYOND creation, or WITHOUT creation. This is the father. The son is the glory of WITH creation. The Father is the glory of the glory of creation, and is himself, only self and himself \"outside of\" / beyond / without creation. In this sense, created things / creations have all three ontological conceptual cosms. But GOD alone has no \"WITHOUT\" or \"BEYOND\" ontological cosm"
+      ],
+      "text": "And each one cried out to each other, saying this: HOLY, HOLY, HOLY, is Yahweh of Armies, The glory of HIM / His GLORY is filling / is-the-fullness of the seen realm (the earth)",
+      "versions": {
+        "nirv": "They were calling out to one another. They were saying, “Holy, holy, holy is the Lord who rules over all. The whole earth is full of his glory.”",
+        "leb": "And the one called to the other and said, “Holy, holy, holy is Yahweh of hosts! The whole earth is full of his glory.”",
+        "original": "וְקָרָ֨א זֶ֤ה אֶל־זֶה֙ וְאָמַ֔ר קָדֹ֧ושׁ ׀ קָדֹ֧ושׁ ׀ קָדֹ֖ושׁ יְהוָ֣ה צְבָאֹ֑ות מְלֹ֥א כָל־הָאָ֖רֶץ כְּבֹודֹֽו׃"
+      }
+    }
+  ],
   "outline_chain": [],
   "concept_lexicon": [],
   "practices": [],
@@ -21,11 +37,11 @@
   "board_game_content": [],
   "childrens_content": [],
   "base_sketch": [],
-  "base_body": "And each one cried out to each other, saying this: HOLY, HOLY, HOLY, is Yahweh of Armies, The glory of HIM / His GLORY is filling / is-the-fullness of the seen realm (the earth)",
+  "base_body": "",
   "type": "base",
   "issue": {
     "number": 84,
     "url": "https://github.com/joshualinog/whatis.foundation/issues/84",
-    "updated_at": "2026-10-11T17:48:13Z"
+    "updated_at": "2026-10-11T17:48:33Z"
   }
 }

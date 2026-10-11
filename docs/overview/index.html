@@ -87,7 +87,6 @@
 
 
 
-
   
   
   
@@ -173,6 +172,70 @@ It is also conceivable that an `outline_sublink` could have multiple base proper
         <p>Created for sacred education and community study.</p>
       </div>
     </footer>
+  <script>
+    (function () {
+      var NAMES = { dt: 'Direct translation (DT)', nirv: 'NIrV', leb: 'LEB', original: 'Original language' };
+      var STEPS = [0.875, 1, 1.25, 1.5, 1.75, 2.1];
+
+      function pressed(buttons, key) {
+        [].slice.call(buttons).forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-set-version') === key || b.getAttribute('data-card-version') === key)); });
+      }
+
+      // Show one version of a scripture; a version it does not have falls back to its direct translation.
+      function showVersion(card, key) {
+        var verse = card.querySelector('[data-verse]');
+        var shown = verse.querySelector('[data-v="' + key + '"]') || verse.querySelector('[data-v="dt"]');
+        [].slice.call(verse.querySelectorAll('[data-v]')).forEach(function (p) { p.hidden = p !== shown; });
+        var label = card.querySelector('[data-version-label]');
+        var which = shown.getAttribute('data-v');
+        // with no direct translation the DT verse is the LEB, and says so
+        var shownName = which === 'dt' ? shown.getAttribute('data-label') : which;
+        if (label) label.textContent = NAMES[shownName];
+        pressed(card.querySelectorAll('[data-card-version]'), which);
+      }
+
+      [].slice.call(document.querySelectorAll('[data-scripture-list]')).forEach(function (root) {
+        var cards = [].slice.call(root.querySelectorAll('[data-scripture]'));
+        var step = 1;
+        cards.forEach(function (card) { showVersion(card, 'dt'); });
+        root.addEventListener('click', function (e) {
+          var button = e.target.closest('button');
+          if (!button || !root.contains(button)) return;
+          var top = button.getAttribute('data-set-version');
+          var one = button.getAttribute('data-card-version');
+          var size = button.getAttribute('data-font');
+          if (top) {
+            pressed(root.querySelectorAll('[data-set-version]'), top);
+            cards.forEach(function (card) { showVersion(card, top); });
+          } else if (one) {
+            // pressing the lit pill again goes back to the direct translation; a scripture's slide and list line move together
+            var next = button.getAttribute('aria-pressed') === 'true' ? 'dt' : one;
+            var id = button.closest('[data-scripture]').getAttribute('data-scripture');
+            cards.filter(function (card) { return card.getAttribute('data-scripture') === id; }).forEach(function (card) { showVersion(card, next); });
+          } else if (size) {
+            step = Math.max(0, Math.min(STEPS.length - 1, step + Number(size)));
+            root.style.setProperty('--verse-scale', STEPS[step]);
+          } else if (button.hasAttribute('data-slide-prev') || button.hasAttribute('data-slide-next')) {
+            var track = root.querySelector('[data-slides]');
+            var slide = track.querySelector('li');
+            var gap = parseFloat(getComputedStyle(track).columnGap) || 0;
+            track.scrollBy({ left: (button.hasAttribute('data-slide-next') ? 1 : -1) * (slide.getBoundingClientRect().width + gap), behavior: 'smooth' });
+          }
+        });
+      });
+
+      // A link to a scripture or its teacher notes opens that accordion item.
+      function openHash() {
+        var target = location.hash.length > 1 && document.getElementById(decodeURIComponent(location.hash.slice(1)));
+        if (target && target.tagName === 'DETAILS') {
+          target.open = true;
+          target.scrollIntoView();
+        }
+      }
+      window.addEventListener('hashchange', openHash);
+      openHash();
+    })();
+  </script>
   <script>
     (function () {
       var containers = [].slice.call(document.querySelectorAll('[data-masonry]'));
