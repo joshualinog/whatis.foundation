@@ -535,7 +535,21 @@ video {
   color: rgb(30 41 59 / var(--tw-text-opacity, 1));
     font-size: calc(1.125rem * var(--verse-scale, 1));
     line-height: 1.9;
+    overflow-wrap: anywhere;
 }
+/* At very large sizes a slide fills the slider rather than showing its neighbour, and the arrows move to the top of a slide that may be thousands of pixels tall. */
+[data-verse-big] [data-slides] > li {
+    width: 100%;
+  }
+[data-verse-big] [data-slides] {
+    padding-left: 0;
+    padding-right: 0;
+  }
+[data-verse-big] [data-slide-prev],
+  [data-verse-big] [data-slide-next] {
+    top: 0.5rem;
+    transform: none;
+  }
 @media (min-width: 640px) {
     .verse-text {
       font-size: calc(1.25rem * var(--verse-scale, 1));
@@ -744,6 +758,9 @@ video {
 }
 .min-w-0 {
   min-width: 0px;
+}
+.min-w-\[3\.5ch\] {
+  min-width: 3.5ch;
 }
 .max-w-2xl {
   max-width: 42rem;
@@ -1322,6 +1339,10 @@ video {
 .italic {
   font-style: italic;
 }
+.tabular-nums {
+  --tw-numeric-spacing: tabular-nums;
+  font-variant-numeric: var(--tw-ordinal) var(--tw-slashed-zero) var(--tw-numeric-figure) var(--tw-numeric-spacing) var(--tw-numeric-fraction);
+}
 .leading-6 {
   line-height: 1.5rem;
 }
@@ -1708,4 +1729,28 @@ video {
 }
 .\[\&\:\:-webkit-scrollbar\]\:hidden::-webkit-scrollbar {
   display: none;
+}
+[data-verse-big] .\[\[data-verse-big\]_\&\]\:hidden {
+  display: none;
+}
+[data-verse-big] .\[\[data-verse-big\]_\&\]\:p-2 {
+  padding: 0.5rem;
+}
+[data-verse-big] .\[\[data-verse-big\]_\&\]\:px-2 {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+[data-verse-big] .\[\[data-verse-big\]_\&\]\:pl-2 {
+  padding-left: 0.5rem;
+}
+@media (min-width: 640px) {
+
+  [data-verse-big] .\[\[data-verse-big\]_\&\]\:sm\:p-3 {
+    padding: 0.75rem;
+  }
+
+  [data-verse-big] .\[\[data-verse-big\]_\&\]\:sm\:px-4 {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
 }

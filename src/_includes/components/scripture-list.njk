@@ -16,8 +16,8 @@
 
 {# A verse with its large opening quote mark and the bar down the left, as in the sketch. #}
 {% macro quote(s) %}
-<blockquote class="flex gap-3 border-l-4 border-slate-700 pl-4">
-  <span aria-hidden="true" class="font-serif text-5xl leading-none text-brand-300">“</span>
+<blockquote class="flex gap-3 border-l-4 border-slate-700 pl-4 [[data-verse-big]_&]:pl-2">
+  <span aria-hidden="true" class="font-serif text-5xl leading-none text-brand-300 [[data-verse-big]_&]:hidden">“</span>
   <div data-verse class="min-w-0 flex-1">{{ verses(s) }}</div>
 </blockquote>
 {% endmacro %}
@@ -50,8 +50,9 @@
     {{ pill('data-set-version', 'original', 'Original', 'Original language', false, false) }}
   </div>
   <div class="flex items-center gap-2">
-    <button type="button" data-font="-1" aria-label="Smaller text" class="rounded-full border border-slate-400 bg-white px-3 py-1 text-xs font-semibold text-slate-700 hover:border-brand-500 hover:text-brand-700">A−</button>
-    <button type="button" data-font="1" aria-label="Larger text" class="rounded-full border border-slate-400 bg-white px-3 py-1 text-sm font-semibold text-slate-700 hover:border-brand-500 hover:text-brand-700">A+</button>
+    <button type="button" data-font="-1" aria-label="Smaller text" class="rounded-full border border-slate-400 bg-white px-3 py-1 text-xs font-semibold text-slate-700 hover:border-brand-500 hover:text-brand-700 disabled:cursor-not-allowed disabled:opacity-40">A−</button>
+    <span data-font-readout aria-live="polite" class="min-w-[3.5ch] text-center text-xs font-semibold tabular-nums text-slate-500">100%</span>
+    <button type="button" data-font="1" aria-label="Larger text" class="rounded-full border border-slate-400 bg-white px-3 py-1 text-sm font-semibold text-slate-700 hover:border-brand-500 hover:text-brand-700 disabled:cursor-not-allowed disabled:opacity-40">A+</button>
   </div>
 </div>
 {% endmacro %}
@@ -63,9 +64,9 @@
 {# One slide: the speech bubble, then reference / version / teacher notes on the left, pills and the slide number on the right. #}
 {% macro slide(s, n, slideNumber, total) %}
 <li id="scripture-slide-{{ slideNumber }}" data-scripture="{{ n }}" role="group" aria-roledescription="slide" aria-label="{{ slideNumber }} of {{ total }}" class="w-[90%] shrink-0 snap-center sm:w-[85%]">
-  <div class="rounded-3xl border border-slate-300 bg-white p-3 shadow-soft sm:p-5">
-    <div class="relative rounded-3xl border-2 border-slate-700 px-4 pb-5 pt-9 sm:px-6 sm:pb-6">
-      <span aria-hidden="true" class="absolute left-4 top-1 font-serif text-6xl leading-none text-brand-300">“</span>
+  <div class="rounded-3xl border border-slate-300 bg-white p-3 shadow-soft sm:p-5 [[data-verse-big]_&]:p-2 [[data-verse-big]_&]:sm:p-3">
+    <div class="relative rounded-3xl border-2 border-slate-700 px-4 pb-5 pt-9 sm:px-6 sm:pb-6 [[data-verse-big]_&]:px-2 [[data-verse-big]_&]:sm:px-4">
+      <span aria-hidden="true" class="absolute left-4 top-1 font-serif text-6xl leading-none text-brand-300 [[data-verse-big]_&]:hidden">“</span>
       <div data-verse>{{ verses(s) }}</div>
       <span aria-hidden="true" class="absolute -bottom-[9px] left-12 h-4 w-4 rotate-45 border-b-2 border-r-2 border-slate-700 bg-white"></span>
     </div>

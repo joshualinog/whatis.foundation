@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="stylesheet" href="/styles.css?v=c4fb174319" />
+    <link rel="stylesheet" href="/styles.css?v=9d7c17bf9d" />
   </head>
   <body class="min-h-screen bg-slate-50 text-slate-900">
     <div class="min-h-screen">
@@ -244,7 +244,14 @@
   <script>
     (function () {
       var NAMES = { dt: 'Direct translation (DT)', nirv: 'NIrV', leb: 'LEB', original: 'Original language' };
-      var STEPS = [0.875, 1, 1.25, 1.5, 1.75, 2.1];
+      // Text size steps, as multiples of the base verse size (up to 6x, about 108px). The choice is shared by every list and remembered.
+      var STEPS = [0.875, 1, 1.25, 1.5, 1.75, 2, 2.5, 3, 3.5, 4, 5, 6];
+      var BIG_FROM = 2.5; // from here on a slide takes the full width instead of peeking
+      var step = 1;
+      try {
+        var saved = localStorage.getItem('verseStep');
+        if (saved !== null && !isNaN(Number(saved))) step = Math.max(0, Math.min(STEPS.length - 1, Number(saved)));
+      } catch (e) {}
 
       function pressed(buttons, key) {
         [].slice.call(buttons).forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-set-version') === key || b.getAttribute('data-card-version') === key)); });
@@ -278,10 +285,19 @@
         track.style.height = nearest.slide.offsetHeight + parseFloat(style.paddingTop) + parseFloat(style.paddingBottom) + 'px';
       }
 
+      function applyScale() {
+        var root = document.documentElement;
+        root.style.setProperty('--verse-scale', STEPS[step]);
+        if (STEPS[step] >= BIG_FROM) root.setAttribute('data-verse-big', ''); else root.removeAttribute('data-verse-big');
+        [].slice.call(document.querySelectorAll('[data-font-readout]')).forEach(function (el) { el.textContent = Math.round(STEPS[step] * 100) + '%'; });
+        [].slice.call(document.querySelectorAll('[data-font="-1"]')).forEach(function (b) { b.disabled = step === 0; });
+        [].slice.call(document.querySelectorAll('[data-font="1"]')).forEach(function (b) { b.disabled = step === STEPS.length - 1; });
+        [].slice.call(document.querySelectorAll('[data-slides]')).forEach(fitSlider);
+      }
+
       [].slice.call(document.querySelectorAll('[data-scripture-list]')).forEach(function (root) {
         var cards = [].slice.call(root.querySelectorAll('[data-scripture]'));
         var track = root.querySelector('[data-slides]');
-        var step = 1;
         var queued = false;
         function fit() { if (track) fitSlider(track); }
         if (track) {
@@ -311,7 +327,8 @@
             cards.filter(function (card) { return card.getAttribute('data-scripture') === id; }).forEach(function (card) { showVersion(card, next); });
           } else if (size) {
             step = Math.max(0, Math.min(STEPS.length - 1, step + Number(size)));
-            root.style.setProperty('--verse-scale', STEPS[step]);
+            applyScale();
+            try { localStorage.setItem('verseStep', step); } catch (e) {}
           } else if (button.hasAttribute('data-slide-prev') || button.hasAttribute('data-slide-next')) {
             var slide = track.querySelector('li');
             var gap = parseFloat(getComputedStyle(track).columnGap) || 0;
@@ -320,6 +337,8 @@
           fit();
         });
       });
+
+      applyScale();
 
       // A link to a scripture or its teacher notes opens that accordion item.
       function openHash() {
