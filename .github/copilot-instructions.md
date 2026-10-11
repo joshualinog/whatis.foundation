@@ -17,6 +17,7 @@ The issue's label sets its type (`FOUNDATION BASE`, `FOUNDATION PART`, `FOUNDATI
 - Scriptures: the body is the direct translation; nest `<!-- item:teacher_notes -->` (repeatable) and `<!-- item:versions -->` holding `item:nirv`, `item:leb`, `item:original` inside the scripture. Versions written elsewhere in the block carry `ref="…"` and are matched to the scripture by `ref` (not `order`).
 - Outline: `item:link` and `item:sublink` (sublinks attach by `order_parent`). A sublink may carry `base_prop_refs="scripture:John 1:5, concept_entry:Light, image:2"` pointing at items in the same base.
 - Escape `"` as `&quot;` and a literal `-->` as `--&gt;` inside attribute values.
+- Don't indent tags by 4 or more spaces (or a tab): GitHub renders such lines as code blocks, so the tags show up as visible text in the issue. Nesting doesn't need indentation; the parser reads nested items either way.
 - A bot comment titled "Tag check" reports parse errors and warnings after each edit; fix those first.
 
 ## Working in the repo

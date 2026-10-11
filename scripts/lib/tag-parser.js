@@ -521,6 +521,19 @@ function buildOutline(items) {
   return links;
 }
 
+// GitHub renders a line indented four or more spaces (or a tab) as a code block,
+// so an indented tag is no longer hidden: its raw text shows up in the issue.
+// The site still reads it, so this only warns.
+function indentedTagWarnings(source) {
+  const lines = [];
+  source.split('\n').forEach((line, i) => {
+    if (/^(?: {4,}|\t)\s*<!--/.test(line)) lines.push(i + 1);
+  });
+  if (!lines.length) return [];
+  const shown = lines.slice(0, 5).join(', ') + (lines.length > 5 ? ', …' : '');
+  return [`${lines.length} tag line(s) are indented 4+ spaces (lines ${shown}); GitHub shows those as code blocks, so the tags become visible in the issue. Remove the leading spaces (up to 3 are fine)`];
+}
+
 /**
  * @param {string} text issue body
  * @param {{defaultType?: string}} [options] type to assume when the body has no meta:TYPE
@@ -566,6 +579,7 @@ function parseDocText(text, options = {}) {
   });
 
   raw[DOC_TYPES[type || 'base'].body] = extractBody(source, ranges);
+  warnings.push(...indentedTagWarnings(source));
   return { written, type: type || 'base', raw, warnings, errors };
 }
 

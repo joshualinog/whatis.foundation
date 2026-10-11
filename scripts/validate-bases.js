@@ -145,6 +145,13 @@ check('versions written out of order match by ref, not order', () => {
   assert.strictEqual(warnings.length, 2, warnings.join(' | '));
   assert(/Nope 1:1/.test(warnings[0]) && /needs ref/.test(warnings[1]), warnings.join(' | '));
 });
+check('tags indented 4+ spaces warn (GitHub renders them as code)', () => {
+  const body = '<!-- block:scripture_list -->\n  <!-- item:scripture ref="John 1:5" -->\n    <!-- item:versions -->\n      <!-- item:nirv -->\nx\n      <!-- /item:nirv -->\n    <!-- /item:versions -->\n  <!-- /item:scripture -->\n<!-- /block:scripture_list -->';
+  const { doc, warnings } = parse('Base 2', body, 'FOUNDATION BASE');
+  assert(doc && doc.scripture_list[0].versions.nirv === 'x', 'still parsed');
+  assert(warnings.length === 1 && /4 tag line\(s\)/.test(warnings[0]) && /lines 3, 4, 6, 7/.test(warnings[0]), warnings.join(' | '));
+  assert.deepStrictEqual(parse('Base 2', body.replace(/^ +/gm, ''), 'FOUNDATION BASE').warnings, []);
+});
 check('unknown versions key warns', () => {
   const { doc, warnings } = parse('Base 2', `<!-- block:scripture_list -->
 <!-- item:scripture ref="John 1:5" -->Light.<!-- item:versions --><!-- item:kjv -->x<!-- /item:kjv --><!-- /item:versions --><!-- /item:scripture -->
