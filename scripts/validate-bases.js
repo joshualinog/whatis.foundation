@@ -100,6 +100,58 @@ check('outline sublink base_prop_refs', () => {
   assert.strictEqual(warnings.length, 2, warnings.join(' | '));
   assert(/image has 0|images has 0/.test(warnings[0]) && /unknown type/.test(warnings[1]), warnings.join(' | '));
 });
+check('scripture versions and teacher notes, nested', () => {
+  const { doc, errors, warnings } = parse('Base 2', `<!-- block: scripture_list -->
+<!-- item: scripture ref = "ISAIAH 6:3" essential = "true" order = "1" -->
+<!-- item: teacher_notes -->
+First note.
+<!-- /item: teacher_notes -->
+My own translation.
+<!-- item: teacher_notes -->
+Second note.
+<!-- /item: teacher_notes -->
+<!-- item: versions -->
+<!-- item: nirv -->NIrV text<!-- /item: nirv -->
+<!-- item: leb -->LEB text<!-- /item: leb -->
+<!-- item: original -->מקרא<!-- /item: original -->
+<!-- /item: versions -->
+<!-- /item: scripture -->
+<!-- /block: scripture-list -->`, 'FOUNDATION BASE');
+  assert(doc, errors.join('; '));
+  assert.deepStrictEqual(warnings, []);
+  assert.deepStrictEqual(doc.scripture_list, [{
+    ref: 'ISAIAH 6:3',
+    essential: true,
+    order: 1,
+    teacher_notes: ['First note.', 'Second note.'],
+    text: 'My own translation.',
+    versions: { nirv: 'NIrV text', leb: 'LEB text', original: 'מקרא' },
+  }]);
+});
+check('versions written out of order match by ref, not order', () => {
+  const { doc, errors, warnings } = parse('Base 2', `<!-- block:scripture_list -->
+<!-- item:scripture ref="John 1:5" order="1" -->Light.<!-- /item:scripture -->
+<!-- item:scripture ref="Isaiah 6:3" order="2" teacher_notes="Read slowly" -->Holy.<!-- /item:scripture -->
+<!-- item:versions ref="isaiah  6:3" --><!-- item:leb -->Holy LEB<!-- /item:leb --><!-- /item:versions -->
+<!-- item:teacher_notes ref="John 1:5" -->Later note<!-- /item:teacher_notes -->
+<!-- item:versions ref="Nope 1:1" nirv="x" --><!-- /item:versions -->
+<!-- item:versions --><!-- /item:versions -->
+<!-- /block:scripture_list -->`, 'FOUNDATION BASE');
+  assert(doc, errors.join('; '));
+  assert.deepStrictEqual(doc.scripture_list[1].versions, { leb: 'Holy LEB' });
+  assert.deepStrictEqual(doc.scripture_list[1].teacher_notes, ['Read slowly']);
+  assert.deepStrictEqual(doc.scripture_list[0].teacher_notes, ['Later note']);
+  assert.deepStrictEqual(doc.scripture_list[0].versions, {});
+  assert.strictEqual(warnings.length, 2, warnings.join(' | '));
+  assert(/Nope 1:1/.test(warnings[0]) && /needs ref/.test(warnings[1]), warnings.join(' | '));
+});
+check('unknown versions key warns', () => {
+  const { doc, warnings } = parse('Base 2', `<!-- block:scripture_list -->
+<!-- item:scripture ref="John 1:5" -->Light.<!-- item:versions --><!-- item:kjv -->x<!-- /item:kjv --><!-- /item:versions --><!-- /item:scripture -->
+<!-- /block:scripture_list -->`, 'FOUNDATION BASE');
+  assert(doc);
+  assert(warnings.length === 1 && /kjv/.test(warnings[0]), warnings.join(' | '));
+});
 check('concept entry', () => {
   const { doc, errors } = parse('Base 2', `<!-- block:concept_lexicon -->
 <!-- item:concept_entry term="Light" image="https://x.io/a.png" references="Base 02, Base 05" -->

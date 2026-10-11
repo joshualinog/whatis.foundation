@@ -1,0 +1,182 @@
+{# Scripture list and Scripture list: teacher notes, following the handwritten sketches.
+   Scripture list: a slider of speech-bubble slides, then the essential (milk) and further-reading (advanced / meat)
+   lists, each line an accordion. Teacher notes: a numbered accordion with the verse, its version pills and the notes.
+   Each scripture shows its direct translation (`text`, falling back to the LEB when it is empty); the NIrV, LEB and
+   original language come from `versions`. A [data-scripture-list] root is wired up by the script in layout.njk. #}
+
+{# One scripture's verse in every version it has; the script shows one at a time. #}
+{% macro verses(s) %}
+{% set direct = s.text or s.versions.leb %}
+{% if direct %}<p data-v="dt" data-label="{{ 'dt' if s.text else 'leb' }}" class="verse-text whitespace-pre-line">{{ direct }}</p>
+{% else %}<p data-v="dt" data-label="dt" class="text-sm italic text-slate-400">Text coming soon</p>{% endif %}
+{% if s.versions.nirv %}<p data-v="nirv" hidden class="verse-text whitespace-pre-line">{{ s.versions.nirv }}</p>{% endif %}
+{% if s.versions.leb %}<p data-v="leb" hidden class="verse-text whitespace-pre-line">{{ s.versions.leb }}</p>{% endif %}
+{% if s.versions.original %}<p data-v="original" hidden dir="auto" class="verse-text whitespace-pre-line">{{ s.versions.original }}</p>{% endif %}
+{% endmacro %}
+
+{# A verse with its large opening quote mark and the bar down the left, as in the sketch. #}
+{% macro quote(s) %}
+<blockquote class="flex gap-3 border-l-4 border-slate-700 pl-4">
+  <span aria-hidden="true" class="font-serif text-5xl leading-none text-brand-300">“</span>
+  <div data-verse class="min-w-0 flex-1">{{ verses(s) }}</div>
+</blockquote>
+{% endmacro %}
+
+{% macro pill(attr, key, label, title, pressed, disabled) %}
+<button type="button" {{ attr }}="{{ key }}" title="{{ title }}" aria-pressed="{{ 'true' if pressed else 'false' }}"{% if disabled %} disabled{% endif %} class="rounded-full border border-slate-400 bg-white px-3 py-1 text-xs font-semibold uppercase tracking-wide text-slate-700 hover:border-brand-500 hover:text-brand-700 aria-pressed:border-brand-600 aria-pressed:bg-brand-600 aria-pressed:text-white disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:border-slate-400 disabled:hover:text-slate-700">{{ label }}</button>
+{% endmacro %}
+
+{# Under a verse: its reference, the version being shown and the three version pills (press the lit one to go back to DT). #}
+{% macro versionRow(s) %}
+<div class="space-y-2">
+  <p class="text-sm font-semibold uppercase tracking-wide text-slate-900">{{ s.ref }}</p>
+  <p data-version-label class="text-[11px] font-semibold uppercase tracking-[0.15em] text-slate-500"></p>
+  <div class="flex flex-wrap items-center gap-2">
+    <span class="text-[11px] font-semibold uppercase tracking-[0.15em] text-slate-500">Versions:</span>
+    {{ pill('data-card-version', 'nirv', 'NIrV', 'New International Reader’s Version', false, not s.versions.nirv) }}
+    {{ pill('data-card-version', 'leb', 'LEB', 'Lexham English Bible', false, not s.versions.leb) }}
+    {{ pill('data-card-version', 'original', 'Original', 'Original language', false, not s.versions.original) }}
+  </div>
+</div>
+{% endmacro %}
+
+{# Top level: one set of buttons switches every verse in the list; A−/A+ change the text size. #}
+{% macro controls(label) %}
+<div class="mb-6 flex flex-wrap items-center gap-x-6 gap-y-3" role="group" aria-label="{{ label }}">
+  <div class="flex flex-wrap items-center gap-2">
+    {{ pill('data-set-version', 'dt', 'DT', 'Direct translation', true, false) }}
+    {{ pill('data-set-version', 'nirv', 'NIrV', 'New International Reader’s Version', false, false) }}
+    {{ pill('data-set-version', 'leb', 'LEB', 'Lexham English Bible', false, false) }}
+    {{ pill('data-set-version', 'original', 'Original', 'Original language', false, false) }}
+  </div>
+  <div class="flex items-center gap-2">
+    <button type="button" data-font="-1" aria-label="Smaller text" class="rounded-full border border-slate-400 bg-white px-3 py-1 text-xs font-semibold text-slate-700 hover:border-brand-500 hover:text-brand-700">A−</button>
+    <button type="button" data-font="1" aria-label="Larger text" class="rounded-full border border-slate-400 bg-white px-3 py-1 text-sm font-semibold text-slate-700 hover:border-brand-500 hover:text-brand-700">A+</button>
+  </div>
+</div>
+{% endmacro %}
+
+{% macro chevron() %}
+<svg aria-hidden="true" viewBox="0 0 20 20" class="h-5 w-5 shrink-0 text-slate-600 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8l5 5 5-5"/></svg>
+{% endmacro %}
+
+{# One slide: the speech bubble, then reference / version / teacher notes on the left, pills and the slide number on the right. #}
+{% macro slide(s, n, slideNumber, total) %}
+<li id="scripture-slide-{{ slideNumber }}" data-scripture="{{ n }}" role="group" aria-roledescription="slide" aria-label="{{ slideNumber }} of {{ total }}" class="w-[85%] shrink-0 snap-center">
+  <div class="rounded-3xl border border-slate-300 bg-white p-5 shadow-soft">
+    <div class="relative rounded-3xl border-2 border-slate-700 px-6 pb-6 pt-9">
+      <span aria-hidden="true" class="absolute left-4 top-1 font-serif text-6xl leading-none text-brand-300">“</span>
+      <div data-verse>{{ verses(s) }}</div>
+      <span aria-hidden="true" class="absolute -bottom-[9px] left-12 h-4 w-4 rotate-45 border-b-2 border-r-2 border-slate-700 bg-white"></span>
+    </div>
+    <div class="mt-6 flex flex-wrap items-end justify-between gap-x-6 gap-y-4 px-2">
+      <div class="space-y-1">
+        <p class="text-sm font-semibold uppercase tracking-wide text-slate-900">{{ s.ref }}</p>
+        <p data-version-label class="text-[11px] font-semibold uppercase tracking-[0.15em] text-slate-500"></p>
+        {% if s.teacher_notes.length %}<a href="#scripture-notes-{{ n }}" class="inline-block text-sm font-semibold text-brand-700 underline underline-offset-4"><span aria-hidden="true">*</span> teacher notes</a>{% endif %}
+      </div>
+      <div class="flex flex-col items-end gap-3">
+        <div class="flex flex-wrap items-center justify-end gap-2">
+          {{ pill('data-card-version', 'nirv', 'NIrV', 'New International Reader’s Version', false, not s.versions.nirv) }}
+          {{ pill('data-card-version', 'leb', 'LEB', 'Lexham English Bible', false, not s.versions.leb) }}
+          {{ pill('data-card-version', 'original', 'Original', 'Original language', false, not s.versions.original) }}
+        </div>
+        <span class="text-3xl font-semibold leading-none text-slate-300" aria-hidden="true">{{ slideNumber }}</span>
+      </div>
+    </div>
+  </div>
+</li>
+{% endmacro %}
+
+{# The scripture list: slider, then "Essential" and "Further reading" lines. #}
+{% macro list(doc) %}
+{% if doc.scripture_list.length %}
+{% set groups = [{ essential: true, label: 'Essential · milk' }, { essential: false, label: 'Further reading · advanced / meat' }] %}
+<div data-scripture-list>
+  {{ controls('Scripture list display') }}
+
+  <div data-slider class="relative -mx-2">
+    <button type="button" data-slide-prev aria-label="Previous scripture" class="absolute left-0 top-1/2 z-10 -translate-y-1/2 rounded-full border border-slate-300 bg-white/95 px-3 pb-2 pt-1 text-2xl leading-none text-slate-700 shadow-soft hover:border-brand-500 hover:text-brand-700">‹</button>
+    <ol data-slides class="flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-smooth px-[7.5%] pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+      {% set slideCount = [] %}
+      {% for group in groups %}{% for s in doc.scripture_list %}{% if (s.essential and group.essential) or (not s.essential and not group.essential) %}
+      {% set slideCount = (slideCount.push(1), slideCount) %}
+      {{ slide(s, loop.index, slideCount.length, doc.scripture_list.length) }}
+      {% endif %}{% endfor %}{% endfor %}
+    </ol>
+    <button type="button" data-slide-next aria-label="Next scripture" class="absolute right-0 top-1/2 z-10 -translate-y-1/2 rounded-full border border-slate-300 bg-white/95 px-3 pb-2 pt-1 text-2xl leading-none text-slate-700 shadow-soft hover:border-brand-500 hover:text-brand-700">›</button>
+  </div>
+
+  {% set slideCount = [] %}
+  {% for group in groups %}
+  {% set shown = [] %}
+  {% for s in doc.scripture_list %}{% if (s.essential and group.essential) or (not s.essential and not group.essential) %}{% set shown = (shown.push(s), shown) %}{% endif %}{% endfor %}
+  {% if shown.length %}
+  <h5 class="mb-1 mt-10 text-[11px] font-semibold uppercase tracking-[0.3em] text-slate-600">{{ group.label }}</h5>
+  <ol class="border-t border-slate-300">
+    {% set count = [] %}
+    {% for s in doc.scripture_list %}{% if (s.essential and group.essential) or (not s.essential and not group.essential) %}
+    {% set count = (count.push(s), count) %}
+    {% set slideCount = (slideCount.push(1), slideCount) %}
+    <li class="border-b border-slate-300">
+      <details id="scripture-{{ loop.index }}" data-scripture="{{ loop.index }}" class="group">
+        <summary class="flex cursor-pointer list-none flex-wrap items-center gap-x-3 gap-y-1 py-4 [&::-webkit-details-marker]:hidden">
+          <span class="font-semibold text-slate-500">{{ count.length }}.</span>
+          <span class="font-semibold uppercase tracking-wide text-slate-900">{{ s.ref }}</span>
+          <span class="ml-auto flex items-center gap-3 text-xs font-semibold text-brand-700">
+            <a href="#scripture-slide-{{ slideCount.length }}" class="underline underline-offset-4">Slide {{ slideCount.length }}</a>
+            {% if s.teacher_notes.length %}<a href="#scripture-notes-{{ loop.index }}" class="underline underline-offset-4"><span aria-hidden="true">*</span> Teacher notes</a>{% endif %}
+            {{ chevron() }}
+          </span>
+        </summary>
+        <div class="space-y-5 pb-6 pl-1">
+          {{ quote(s) }}
+          <div class="pl-9">{{ versionRow(s) }}</div>
+        </div>
+      </details>
+    </li>
+    {% endif %}{% endfor %}
+  </ol>
+  {% endif %}
+  {% endfor %}
+</div>
+{% endif %}
+{% endmacro %}
+
+{# Scripture list: teacher notes. Only scriptures that have notes appear. #}
+{% macro teacherNotes(doc) %}
+{% set withNotes = [] %}
+{% for s in doc.scripture_list %}{% if s.teacher_notes.length %}{% set withNotes = (withNotes.push(s), withNotes) %}{% endif %}{% endfor %}
+{% if withNotes.length %}
+<div data-scripture-list>
+  {{ controls('Teacher notes display') }}
+  <ol class="border-t border-slate-300">
+    {% set count = [] %}
+    {% for s in doc.scripture_list %}{% if s.teacher_notes.length %}
+    {% set count = (count.push(s), count) %}
+    <li class="border-b border-slate-300">
+      <details id="scripture-notes-{{ loop.index }}" data-scripture="{{ loop.index }}" class="group">
+        <summary class="flex cursor-pointer list-none items-center gap-x-3 py-4 [&::-webkit-details-marker]:hidden">
+          <span class="font-semibold text-slate-500">{{ count.length }}.</span>
+          <span class="font-semibold uppercase tracking-wide text-slate-900">{{ s.ref }}</span>
+          <span class="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Notes</span>
+          <span class="ml-auto">{{ chevron() }}</span>
+        </summary>
+        <div class="space-y-6 pb-6 pl-1">
+          {{ quote(s) }}
+          <div class="pl-9">{{ versionRow(s) }}</div>
+          <div>
+            <h6 class="text-[11px] font-semibold uppercase tracking-[0.3em] text-slate-600">Teacher notes</h6>
+            <div class="mt-3 space-y-4 border-t border-slate-300 pt-4 leading-8 text-slate-700">
+              {% for note in s.teacher_notes %}<p class="whitespace-pre-line">{{ note }}</p>{% endfor %}
+            </div>
+          </div>
+          <a href="#scripture-{{ loop.index }}" class="inline-block text-sm font-semibold text-brand-700 underline underline-offset-4">← Back to {{ s.ref }} in the scripture list</a>
+        </div>
+      </details>
+    </li>
+    {% endif %}{% endfor %}
+  </ol>
+</div>
+{% endif %}
+{% endmacro %}

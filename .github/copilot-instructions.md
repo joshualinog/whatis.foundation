@@ -14,6 +14,7 @@ The issue's label sets its type (`FOUNDATION BASE`, `FOUNDATION PART`, `FOUNDATI
 - `long_title` is the full handwritten title shown as the heading on cards and base pages; the GitHub issue title is the short `title`. Put it in a visible tag, not in the `meta` tag.
 - Blocks hold items: `<!-- block:scripture_list -->`, `<!-- item:scripture ref="John 1:5" essential -->text<!-- /item:scripture -->`, `<!-- /block:scripture_list -->`. Any `item:*` alias works inside a known block.
 - Repeating a block, a `short_description` or a `long_description` appends in order of occurrence; single-valued fields (`title`, `number`, urls) keep the first value and warn on a conflict. Items sharing an `order` merge.
+- Scriptures: the body is the direct translation; nest `<!-- item:teacher_notes -->` (repeatable) and `<!-- item:versions -->` holding `item:nirv`, `item:leb`, `item:original` inside the scripture. Versions written elsewhere in the block carry `ref="…"` and are matched to the scripture by `ref` (not `order`).
 - Outline: `item:link` and `item:sublink` (sublinks attach by `order_parent`). A sublink may carry `base_prop_refs="scripture:John 1:5, concept_entry:Light, image:2"` pointing at items in the same base.
 - Escape `"` as `&quot;` and a literal `-->` as `--&gt;` inside attribute values.
 - A bot comment titled "Tag check" reports parse errors and warnings after each edit; fix those first.

@@ -73,12 +73,23 @@ const ResourceContentSchema = z.object({
 
 // ── base domain objects ──────────────────────────────────────────────────────
 
+const ScriptureVersionsSchema = z.object({
+  nirv: z.string().optional(),
+  leb: z.string().optional(),
+  original: z.string().optional(),
+});
+
+// `text` is the direct translation (the author's own); `versions` holds the
+// hand-entered NIrV, Lexham English Bible and original-language texts.
 const ScriptureSchema = z.object({
   ref: z.string(),
   essential: z.boolean().default(false),
   order: z.number().default(1),
-  teacher_notes: z.string().optional(),
+  teacher_notes: z
+    .preprocess(val => (typeof val === 'string' ? [val] : val), z.array(z.string()))
+    .default([]),
   text: z.string().default(''),
+  versions: ScriptureVersionsSchema.default({}),
 });
 
 const OutlineSublinkSchema = z.object({

@@ -43,6 +43,13 @@
     gap: 1.25rem;
   }
 
+  /* Scripture verses: big, loosely spaced and legible; the A−/A+ buttons change --verse-scale (see layout.njk). */
+  .verse-text {
+    @apply text-slate-800;
+    font-size: calc(1.25rem * var(--verse-scale, 1));
+    line-height: 2.1;
+  }
+
   .base-prose {
     @apply space-y-4 leading-7 text-slate-700;
   }

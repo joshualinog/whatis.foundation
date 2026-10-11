@@ -35,7 +35,7 @@
 
 const { BLOCK_FIELDS, DOC_TYPES, resolveType } = require('./schema');
 
-const TAG = /<!--\s*(\/)?\s*(meta|block|item|field|base|part|division|overview)\b(?::([A-Za-z0-9_-]+))?([\s\S]*?)-->/g;
+const TAG = /<!--\s*(\/)?\s*(meta|block|item|field|base|part|division|overview)\b(?:\s*:\s*([A-Za-z0-9_-]+))?([\s\S]*?)-->/g;
 const ATTR = /([A-Za-z_][\w-]*)(?:\s*=\s*(?:"([^"]*)"|'([^']*)'))?/g;
 
 const NUMERIC_ATTRS = new Set(['order', 'order_parent', 'number', 'part_parent']);
@@ -76,7 +76,8 @@ function tokenize(text) {
       // <!-- base:long_title --> reads as <!-- field:long_title -->
       kind: /^(?:base|part|division|overview)$/.test(m[2]) ? 'field' : m[2],
       closing: Boolean(m[1]),
-      name: m[3] || '',
+      // scripture-list and scripture_list are the same name; so are "item: nirv" and "item:nirv"
+      name: fieldName(m[3] || ''),
       source: m[4],
       start: m.index,
       end: m.index + m[0].length,
@@ -127,6 +128,33 @@ function extractTags(text, warnings, errors) {
   let block = null;
   let openMeta = null;
 
+  // Pair each <!-- /item:x --> with the nearest unclosed <!-- item:x -->. An item
+  // that is never closed is a leaf; a closed one may hold further items (a
+  // scripture holds its teacher_notes and versions) and its own text.
+  const pairs = new Map();
+  const unclosed = {};
+  tokens.forEach((t, i) => {
+    if (t.kind !== 'item') return;
+    if (!t.closing) (unclosed[t.name] = unclosed[t.name] || []).push(i);
+    else if ((unclosed[t.name] || []).length) pairs.set(unclosed[t.name].pop(), i);
+  });
+  const open = [];
+
+  function finishItem(node, parent, endPos) {
+    if (parent) {
+      parent.children.push(node);
+      parent.cursor = endPos;
+      return;
+    }
+    const { alias, attrs, body, children } = node;
+    if (!block) {
+      warnings.push(`item:${alias} is outside any block (ignored)`);
+    } else if (block.isBody) {
+      warnings.push(`item:${alias} inside block:${block.name} (ignored; ${block.name} only holds freeform text)`);
+    } else if (block.known) {
+      (blocks[block.name] = blocks[block.name] || []).push({ alias, attrs, body, children });
+    }
+  }
   for (let i = 0; i < tokens.length; i += 1) {
     const t = tokens[i];
 
@@ -198,9 +226,11 @@ function extractTags(text, warnings, errors) {
         if (!block) warnings.push(`stray <!-- /block:${t.name} -->`);
         else if (block.name !== t.name) warnings.push(`block:${block.name} was closed by /block:${t.name}`);
         block = null;
+        open.length = 0;
         continue;
       }
       if (block) warnings.push(`block:${block.name} was not closed before block:${t.name}`);
+      open.length = 0;
       const isBody = BODY_BLOCK.test(t.name);
       const known = isBody || BLOCK_FIELDS.includes(t.name);
       if (!known) warnings.push(`unknown block "${t.name}" (its items are ignored)`);
@@ -211,26 +241,26 @@ function extractTags(text, warnings, errors) {
     // item
     ranges.push([t.start, t.end]);
     if (t.closing) {
-      warnings.push(`stray <!-- /item:${t.name} -->`);
+      const node = open.pop();
+      if (!node || node.name !== t.name || node.closeAt !== i) {
+        warnings.push(`stray <!-- /item:${t.name} -->`);
+        if (node) open.push(node);
+        continue;
+      }
+      node.pieces.push(text.slice(node.cursor, t.start));
+      node.body = node.pieces.join('').replace(/\n{3,}/g, '\n\n').trim();
+      ranges.push([node.bodyStart, t.end]);
+      finishItem(node, open[open.length - 1], t.end);
       continue;
     }
-    let body = '';
-    const next = tokens[i + 1];
-    if (next && next.kind === 'item' && next.closing && next.name === t.name) {
-      body = text.slice(t.end, next.start).trim();
-      ranges.push([t.end, next.end]);
-      i += 1;
+    const node = { alias: t.name, name: t.name, attrs: parseAttributes(t.source), body: '', children: [], pieces: [], start: t.start, bodyStart: t.end, cursor: t.end, closeAt: pairs.get(i) };
+    const parent = open[open.length - 1];
+    if (parent) parent.pieces.push(text.slice(parent.cursor, t.start));
+    if (node.closeAt !== undefined) {
+      open.push(node);
+    } else {
+      finishItem(node, parent, t.end);
     }
-    if (!block) {
-      warnings.push(`item:${t.name} is outside any block (ignored)`);
-      continue;
-    }
-    if (block.isBody) {
-      warnings.push(`item:${t.name} inside block:${block.name} (ignored; ${block.name} only holds freeform text)`);
-      continue;
-    }
-    if (!block.known) continue;
-    (blocks[block.name] = blocks[block.name] || []).push({ alias: t.name, attrs: parseAttributes(t.source), body });
   }
 
   // A final "<!--" with no "-->" after it hides everything below it.
@@ -239,6 +269,7 @@ function extractTags(text, warnings, errors) {
     warnings.push(`a comment starting "${text.slice(lastOpen, lastOpen + 40).replace(/\s+/g, ' ').trim()}" is never closed with "-->", so everything after it is hidden`);
   }
   if (block) warnings.push(`block:${block.name} was never closed`);
+  open.forEach(node => warnings.push(`item:${node.alias} was never closed properly (check the order of its closing tags)`));
   if (openMeta) warnings.push(`meta:${openMeta} was never closed`);
   const meta = resolveScalars(found, warnings);
   return { types, meta, blocks, ranges };
@@ -292,7 +323,7 @@ function upsertByOrder(items) {
     const key = `${kind}|${item.attrs.order}|${parent}`;
     const existing = byKey.get(key);
     if (!existing) {
-      const copy = { alias: item.alias, attrs: { ...item.attrs }, body: item.body };
+      const copy = { alias: item.alias, attrs: { ...item.attrs }, body: item.body, children: [...(item.children || [])] };
       byKey.set(key, copy);
       merged.push(copy);
       return;
@@ -302,6 +333,7 @@ function upsertByOrder(items) {
       else if (LIST_ATTRS.has(k) && typeof v === 'string') existing.attrs[k] = `${existing.attrs[k]},${v}`;
     });
     if (item.body) existing.body = existing.body ? `${existing.body}\n\n${item.body}` : item.body;
+    existing.children.push(...(item.children || []));
   });
   return merged;
 }
@@ -330,7 +362,6 @@ const MAPPERS = {
   videos: simpleMedia(['src', 'alt', 'main_video']),
   youtube: simpleMedia(['src', 'alt']),
   podcast: simpleMedia(['src', 'alt']),
-  scripture_list: item => withText(pick(item.attrs, ['ref', 'essential', 'order', 'teacher_notes']), 'text', item),
   concept_lexicon: item => withText(pick(item.attrs, ['term', 'image', 'references']), 'definition', item),
   mind_movies: item => withText(pick(item.attrs, ['order', 'track_urls', 'notes']), 'text', item),
   mishnah_catechesis: item =>
@@ -341,7 +372,86 @@ RESOURCE_BLOCKS.forEach(name => {
     withText(pick(item.attrs, ['title', 'order', 'url', 'image_urls', 'video_urls', 'audio_urls', 'notes']), 'text', item);
 });
 
-const ORDERED_BLOCKS = new Set(['scripture_list', 'mind_movies', 'mishnah_catechesis', ...RESOURCE_BLOCKS]);
+const ORDERED_BLOCKS = new Set(['mind_movies', 'mishnah_catechesis', ...RESOURCE_BLOCKS]);
+
+// ── scriptures ───────────────────────────────────────────────────────────────
+// A scripture's body is its direct translation (`text`). Inside it may sit
+// `item:teacher_notes` (repeatable) and `item:versions` holding `item:nirv`,
+// `item:leb` and `item:original`. Because they are nested they belong to that
+// scripture, whatever its `order`. A teacher_notes / versions item written on
+// its own (outside any scripture) says which scripture it belongs to with
+// `ref`, so versions can be handwritten out of order in the sketchbook.
+
+const VERSION_KEYS = { nirv: 'nirv', leb: 'leb', original: 'original', original_language: 'original' };
+const ADDENDUM = { versions: 'versions', version: 'versions', teacher_notes: 'teacher_notes', teacher_note: 'teacher_notes' };
+
+const normRef = ref => String(ref).replace(/\s+/g, ' ').trim().toLowerCase();
+
+function addVersion(raw, key, value, ref, warnings) {
+  if (value === undefined || value === '') return;
+  raw.versions = raw.versions || {};
+  if (raw.versions[key] === undefined) raw.versions[key] = value;
+  else if (raw.versions[key] !== value) warnings.push(`scripture ${ref}: ${key} is written more than once with different values (using the first)`);
+}
+
+function addVersions(raw, item, ref, warnings) {
+  Object.entries(item.attrs).forEach(([k, v]) => {
+    if (VERSION_KEYS[k]) addVersion(raw, VERSION_KEYS[k], String(v), ref, warnings);
+  });
+  (item.children || []).forEach(child => {
+    const key = VERSION_KEYS[child.alias];
+    if (key) addVersion(raw, key, child.body || child.attrs.text, ref, warnings);
+    else warnings.push(`scripture ${ref}: item:${child.alias} inside versions is not used (use ${Object.keys(VERSION_KEYS).filter(k => k !== 'original_language').join(', ')})`);
+  });
+}
+
+function addPart(raw, item, ref, warnings) {
+  const kind = ADDENDUM[item.alias];
+  if (kind === 'teacher_notes') {
+    const note = item.body || item.attrs.text;
+    if (note) (raw.teacher_notes = raw.teacher_notes || []).push(note);
+  } else {
+    addVersions(raw, item, ref, warnings);
+  }
+}
+
+function buildScripture(item, warnings) {
+  const raw = withText(pick(item.attrs, ['ref', 'essential', 'order']), 'text', item);
+  const ref = item.attrs.ref || '(no ref)';
+  if (item.attrs.teacher_notes) raw.teacher_notes = [item.attrs.teacher_notes];
+  (item.children || []).forEach(child => {
+    if (ADDENDUM[child.alias]) addPart(raw, child, ref, warnings);
+    else if (VERSION_KEYS[child.alias]) addVersions(raw, { attrs: {}, children: [child] }, ref, warnings);
+    else warnings.push(`scripture ${ref}: item:${child.alias} is not used inside a scripture (ignored)`);
+  });
+  return raw;
+}
+
+function buildScriptures(items, warnings) {
+  const scriptures = items.filter(item => !ADDENDUM[item.alias]);
+  const addenda = items.filter(item => ADDENDUM[item.alias]);
+  const raws = upsertByOrder(scriptures).map(item => buildScripture(item, warnings));
+
+  const byRef = new Map();
+  raws.forEach(raw => {
+    if (raw.ref === undefined) return;
+    const key = normRef(raw.ref);
+    if (byRef.has(key)) warnings.push(`scripture ${raw.ref} is in the list more than once; separate versions go to the first`);
+    else byRef.set(key, raw);
+  });
+
+  addenda.forEach(item => {
+    const ref = item.attrs.ref;
+    if (ref === undefined) {
+      warnings.push(`item:${item.alias} outside a scripture needs ref="…" to say which scripture it belongs to (ignored)`);
+      return;
+    }
+    const target = byRef.get(normRef(ref));
+    if (!target) warnings.push(`item:${item.alias} ref="${ref}" matches no scripture in the list (ignored)`);
+    else addPart(target, item, target.ref, warnings);
+  });
+  return raws;
+}
 
 // A practice or hand gisture is followed by its `item:step` siblings.
 function buildWithSteps(items, stepTextField) {
@@ -439,6 +549,10 @@ function parseDocText(text, options = {}) {
   Object.entries(blocks).forEach(([name, items]) => {
     if (!DOC_TYPES[type || 'base'].blocks.includes(name)) {
       warnings.push(`block:${name} is not used by ${type || 'base'} (ignored)`);
+      return;
+    }
+    if (name === 'scripture_list') {
+      raw[name] = sortByOrder(buildScriptures(items, warnings));
       return;
     }
     const merged = upsertByOrder(items);

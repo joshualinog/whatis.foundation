@@ -47,7 +47,7 @@ Freeform handwriting goes here, as markdown.
 <!-- meta title="God is Light" number="1" part_parent="1" short_description="…" google_docs_url="https://…" -->
 
 <!-- block:scripture_list -->
-<!-- item:scripture ref="1 John 1:5" essential order="1" teacher_notes="Read slowly" -->
+<!-- item:scripture ref="1 John 1:5" essential order="1" -->
 God is light, and in him is no darkness at all.
 <!-- /item:scripture -->
 <!-- /block:scripture_list -->
@@ -84,6 +84,27 @@ Written out **by hand**, visible on GitHub.
 
 **Outline references.** An `item:sublink` can point at other items in the same base with `base_prop_refs` (also spelled `base_property_references`): a comma-separated list of `type` or `type:selector`, e.g. `base_prop_refs="mind_movie:1, scripture:John 1:5, concept_entry:Light, image:2, hand_gisture:Menorah"`. `type` is a base field (`scripture_list`, `concept_lexicon`, `hand_gistures`…) or its singular (`scripture`, `concept_entry`, `image`, `video`, `practice`, `mind_movie`, `hand_gisture`…); `selector` is a 1-based position or the item's key text (scripture ref, concept term, practice/gesture name, resource title). Repeat a type to point at several items. A reference that matches nothing in the base is reported as a sync warning, and the page shows the references under their sublink.
 
+**Scriptures: direct translation, versions and teacher notes.** A scripture's own text is the author's *direct translation* (`text`, shown as "DT"). Its other versions are hand-entered, not pulled from a service: `nirv`, `leb` (Lexham English Bible) and `original` (original language), stored as `versions`. When there is no direct translation the page shows the LEB instead. Items nest, and a tag may have a space after its colon (`<!-- item: nirv -->`); `scripture-list` and `scripture_list` are the same name.
+
+```html
+<!-- block:scripture_list -->
+<!-- item:scripture ref="Isaiah 6:3" essential order="1" -->
+<!-- item:teacher_notes -->A note for teachers.<!-- /item:teacher_notes -->
+My own translation goes in the body.
+<!-- item:teacher_notes -->Repeat teacher_notes as often as you like.<!-- /item:teacher_notes -->
+<!-- item:versions -->
+<!-- item:nirv -->…<!-- /item:nirv -->
+<!-- item:leb -->…<!-- /item:leb -->
+<!-- item:original -->…<!-- /item:original -->
+<!-- /item:versions -->
+<!-- /item:scripture -->
+<!-- /block:scripture_list -->
+```
+
+Everything nested belongs to its scripture, so nothing has to be matched up. To write versions (or teacher notes) somewhere else, for example out of order in the sketchbook, put `ref="…"` on a stand-alone `item:versions` / `item:teacher_notes` inside the block. It is matched on the scripture's **`ref`**, ignoring case and extra spaces, not on `order`: a `ref` stays correct however the list grows or is reshuffled, whereas an `order` number has to be kept in step by hand. A `ref` that matches nothing (or an item with no `ref`) is reported as a sync warning, and a `ref` written twice in the list sends the versions to the first one. A different second value for the same version is a warning (the first is kept). `teacher_notes="…"` as an attribute still works for a single short note.
+
+On the base page the essential scriptures form a numbered speech-bubble list and the others fall under *Further reading · advanced*. Each line is an accordion; the buttons switch one scripture between DT / NIrV / LEB / Original, and the top-level buttons switch the whole list, with A− / A+ for text size (line spacing starts generous). A `*` links to that scripture's entry in *Scripture list: teacher notes* in the Teacher tools section.
+
 **Pass 2 — body.** Everything that is not a tag (markdown, pasted handwriting images) becomes the freeform body (`base_body`, `part_body`, `division_body` or `overview_body`), shown as *Notes* on the page. A `<!-- block:part-body -->` (or `base-body`, `division-body`, `overview-body`, plain `body`) block is the same thing written explicitly. Raw HTML in it is not rendered.
 
 **Meta attributes**
@@ -102,7 +123,7 @@ Written out **by hand**, visible on GitHub.
 |---|---|
 | `images` / `videos` | `src alt main_image` / `main_video` |
 | `youtube` / `podcast` | `src alt` |
-| `scripture_list` | `ref essential order teacher_notes` [`text`] |
+| `scripture_list` | `ref essential order` [`text`, the direct translation], with nested `item:teacher_notes` and `item:versions` (see *Scriptures* above) |
 | `outline_chain` | link: `order notes` [`text`]; `item:outline_sublink`: `order order_parent notes` [`text`] — attaches to the link whose `order` is `order_parent`, else the previous link |
 | `concept_lexicon` | `term image references` [`definition`] |
 | `practices` | `item:practice` `name` [`description`], followed by `item:step` `number image images` [`instructions`] |
