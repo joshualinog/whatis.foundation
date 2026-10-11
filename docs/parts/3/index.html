@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="stylesheet" href="/styles.css" />
+    <link rel="stylesheet" href="/styles.css?v=c4fb174319" />
   </head>
   <body class="min-h-screen bg-slate-50 text-slate-900">
     <div class="min-h-screen">
@@ -389,10 +389,38 @@
         pressed(card.querySelectorAll('[data-card-version]'), which);
       }
 
+      // The slider is only as tall as the slide in view, so a short verse doesn't leave a gap under it.
+      function fitSlider(track) {
+        var box = track.getBoundingClientRect();
+        var middle = box.left + box.width / 2;
+        var nearest = null;
+        [].slice.call(track.children).forEach(function (slide) {
+          var r = slide.getBoundingClientRect();
+          var distance = Math.abs(r.left + r.width / 2 - middle);
+          if (!nearest || distance < nearest.distance) nearest = { slide: slide, distance: distance };
+        });
+        if (!nearest) return;
+        var style = getComputedStyle(track);
+        track.style.height = nearest.slide.offsetHeight + parseFloat(style.paddingTop) + parseFloat(style.paddingBottom) + 'px';
+      }
+
       [].slice.call(document.querySelectorAll('[data-scripture-list]')).forEach(function (root) {
         var cards = [].slice.call(root.querySelectorAll('[data-scripture]'));
+        var track = root.querySelector('[data-slides]');
         var step = 1;
+        var queued = false;
+        function fit() { if (track) fitSlider(track); }
+        if (track) {
+          track.addEventListener('scroll', function () {
+            if (queued) return;
+            queued = true;
+            requestAnimationFrame(function () { queued = false; fit(); });
+          });
+          window.addEventListener('resize', fit);
+          window.addEventListener('load', fit);
+        }
         cards.forEach(function (card) { showVersion(card, 'dt'); });
+        fit();
         root.addEventListener('click', function (e) {
           var button = e.target.closest('button');
           if (!button || !root.contains(button)) return;
@@ -411,11 +439,11 @@
             step = Math.max(0, Math.min(STEPS.length - 1, step + Number(size)));
             root.style.setProperty('--verse-scale', STEPS[step]);
           } else if (button.hasAttribute('data-slide-prev') || button.hasAttribute('data-slide-next')) {
-            var track = root.querySelector('[data-slides]');
             var slide = track.querySelector('li');
             var gap = parseFloat(getComputedStyle(track).columnGap) || 0;
             track.scrollBy({ left: (button.hasAttribute('data-slide-next') ? 1 : -1) * (slide.getBoundingClientRect().width + gap), behavior: 'smooth' });
           }
+          fit();
         });
       });
 

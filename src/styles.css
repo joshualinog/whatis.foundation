@@ -46,8 +46,14 @@
   /* Scripture verses: big, loosely spaced and legible; the A−/A+ buttons change --verse-scale (see layout.njk). */
   .verse-text {
     @apply text-slate-800;
-    font-size: calc(1.25rem * var(--verse-scale, 1));
-    line-height: 2.1;
+    font-size: calc(1.125rem * var(--verse-scale, 1));
+    line-height: 1.9;
+  }
+  @media (min-width: 640px) {
+    .verse-text {
+      font-size: calc(1.25rem * var(--verse-scale, 1));
+      line-height: 2.1;
+    }
   }
 
   .base-prose {
