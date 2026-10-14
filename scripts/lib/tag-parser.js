@@ -118,6 +118,24 @@ function resolveScalars(found, warnings) {
   return meta;
 }
 
+// Text written directly in a resource block, outside any item, is the `text` of
+// one item titled after the block (`<!-- block:base_sketch -->…` → "Base sketch").
+function takeLooseText(text, block, closeTag, ranges, blocks) {
+  const inner = ranges.slice(block.rangeStart, ranges.length - 1).sort((a, b) => a[0] - b[0]);
+  let loose = '';
+  let cursor = block.bodyStart;
+  inner.forEach(([start, end]) => {
+    if (start > cursor) loose += text.slice(cursor, start);
+    cursor = Math.max(cursor, end);
+  });
+  if (closeTag.start > cursor) loose += text.slice(cursor, closeTag.start);
+  loose = loose.replace(/\n{3,}/g, '\n\n').trim();
+  if (!loose) return;
+  const title = block.name.replace(/_/g, ' ').replace(/^./, c => c.toUpperCase());
+  (blocks[block.name] = blocks[block.name] || []).unshift({ alias: 'text', attrs: { title }, body: loose, children: [] });
+  ranges.push([block.bodyStart, closeTag.start]);
+}
+
 // Pass 1: tags → { types, meta, blocks, ranges }. `ranges` are removed for pass 2.
 function extractTags(text, warnings, errors) {
   const tokens = tokenize(text);
@@ -225,6 +243,7 @@ function extractTags(text, warnings, errors) {
       if (t.closing) {
         if (!block) warnings.push(`stray <!-- /block:${t.name} -->`);
         else if (block.name !== t.name) warnings.push(`block:${block.name} was closed by /block:${t.name}`);
+        else if (RESOURCE_BLOCKS.includes(block.name)) takeLooseText(text, block, t, ranges, blocks);
         block = null;
         open.length = 0;
         continue;
@@ -234,7 +253,7 @@ function extractTags(text, warnings, errors) {
       const isBody = BODY_BLOCK.test(t.name);
       const known = isBody || BLOCK_FIELDS.includes(t.name);
       if (!known) warnings.push(`unknown block "${t.name}" (its items are ignored)`);
-      block = { name: t.name, known, isBody };
+      block = { name: t.name, known, isBody, bodyStart: t.end, rangeStart: ranges.length };
       continue;
     }
 

@@ -13,7 +13,6 @@
 {% call prop('images', 'Images') %}{{ p.images(doc) }}{% endcall %}
 {% call prop('videos', 'Videos') %}{{ p.videos(doc) }}{% endcall %}
 {% call prop('long-description', 'Long description') %}{{ p.descriptionLong(doc) }}{% endcall %}
-{% if body %}{% call prop('notes', 'Notes') %}{{ p.notes(body, 'bare') }}{% endcall %}{% endif %}
 
 <section id="teacher-tools" aria-labelledby="teacher-tools-heading" class="mt-16 border-t border-slate-200 pt-2">
   <h2 id="teacher-tools-heading" class="mt-8 text-3xl font-semibold text-slate-900">Teacher tools</h2>
@@ -40,3 +39,10 @@
   {% call prop('youtube', 'YouTube') %}{{ p.youtube(doc, 'bare') }}{% endcall %}
   {% call prop('podcast', 'Podcast') %}{{ p.podcast(doc, 'bare') }}{% endcall %}
 </section>
+
+{% if body %}
+<section id="extra" aria-labelledby="extra-heading" class="mt-16 border-t border-slate-200 pt-2">
+  <h2 id="extra-heading" class="mt-8 text-3xl font-semibold text-slate-900">Extra</h2>
+  <div class="mt-6">{{ p.notes(body, 'bare') }}</div>
+</section>
+{% endif %}

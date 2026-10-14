@@ -105,7 +105,9 @@ Everything nested belongs to its scripture, so nothing has to be matched up. Don
 
 On the base page the essential scriptures form a numbered speech-bubble list and the others fall under *Further reading · advanced*. Each line is an accordion; the buttons switch one scripture between DT / NIrV / LEB / Original, and the top-level buttons switch the whole list, with A− / A+ for text size (from 88% up to 600% for readers who need very large print; the size is remembered in the browser and shared by both lists; line spacing starts generous). A `*` links to that scripture's entry in *Scripture list: teacher notes* in the Teacher tools section.
 
-**Pass 2 — body.** Everything that is not a tag (markdown, pasted handwriting images) becomes the freeform body (`base_body`, `part_body`, `division_body` or `overview_body`), shown as *Notes* on the page. A `<!-- block:part-body -->` (or `base-body`, `division-body`, `overview-body`, plain `body`) block is the same thing written explicitly. Raw HTML in it is not rendered.
+**Loose text in a resource block.** In `block_talk_content`, `homeschooling_supporting_content`, `board_game_content`, `childrens_content` and the `*_sketch` blocks, text written directly inside the block (outside any `item:`) becomes the `text` of one item titled after the block (for example "Base sketch"). It no longer ends up in the body/Notes. Use explicit items when you want several entries or your own titles.
+
+**Pass 2 — body.** Everything that is not a tag (markdown, pasted handwriting images) becomes the freeform body (`base_body`, `part_body`, `division_body` or `overview_body`), shown as *Notes* on part, division and overview pages and under the *Extra* heading at the bottom of a base page. A `<!-- block:part-body -->` (or `base-body`, `division-body`, `overview-body`, plain `body`) block is the same thing written explicitly. Raw HTML in it is not rendered.
 
 **Meta attributes**
 

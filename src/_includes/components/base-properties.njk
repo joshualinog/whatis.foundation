@@ -179,6 +179,18 @@
 {% endif %}
 {% endmacro %}
 
+{# "Teacher notes" at the bottom of a teacher-tool property. entries: [{ label, note }] #}
+{% macro teacherNotesBlock(entries) %}
+{% if entries.length %}
+<div class="mt-6">
+  <h6 class="text-[11px] font-semibold uppercase tracking-[0.3em] text-slate-600">Teacher notes</h6>
+  <ul class="mt-3 space-y-4 border-t border-slate-300 pt-4 leading-8 text-slate-700">
+    {% for e in entries %}<li>{% if e.label %}<span class="block text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">{{ e.label }}</span>{% endif %}<p class="whitespace-pre-line">{{ e.note }}</p></li>{% endfor %}
+  </ul>
+</div>
+{% endif %}
+{% endmacro %}
+
 {% macro catechesis(doc, sub=false) %}
 {% if doc.mishnah_catechesis.length %}
 {% call section('catechesis', 'Mishnah catechesis', sub) %}
@@ -188,10 +200,12 @@
       {% if item.hand_gisture %}<p class="mb-2 text-xs font-semibold uppercase tracking-[0.25em] text-brand-600">Hand gisture: {{ item.hand_gisture }}</p>{% endif %}
       <p class="font-semibold text-slate-900">{{ item.question }}</p>
       <p class="mt-1 leading-7 text-slate-700">{{ item.answer }}</p>
-      {% if item.notes %}<p class="mt-2 whitespace-pre-line text-sm text-slate-500">{{ item.notes }}</p>{% endif %}
     </li>
     {% endfor %}
   </ol>
+  {% set notes = [] %}
+  {% for item in doc.mishnah_catechesis %}{% if item.notes %}{% set notes = (notes.push({ label: item.question, note: item.notes }), notes) %}{% endif %}{% endfor %}
+  {{ teacherNotesBlock(notes) }}
 {% endcall %}
 {% endif %}
 {% endmacro %}
@@ -273,10 +287,10 @@
     { key: 'homeschooling_supporting_content', label: 'Homeschooling' },
     { key: 'board_game_content', label: 'Board game' },
     { key: 'childrens_content', label: 'Children’s content' },
-    { key: 'base_sketch', label: 'Base sketch' },
-    { key: 'part_sketch', label: 'Part sketch' },
-    { key: 'division_sketch', label: 'Division sketch' },
-    { key: 'overview_sketch', label: 'Overview sketch' }
+    { key: 'base_sketch', label: 'Base sketch', sketch: true },
+    { key: 'part_sketch', label: 'Part sketch', sketch: true },
+    { key: 'division_sketch', label: 'Division sketch', sketch: true },
+    { key: 'overview_sketch', label: 'Overview sketch', sketch: true }
   ] %}{% if group.key in keys %}
 
   {% set items = doc[group.key] %}
@@ -290,10 +304,15 @@
         {% for src in item.image_urls %}<img src="{{ src }}" alt="" loading="lazy" class="mt-3 w-full rounded-xl" />{% endfor %}
         {% for src in item.video_urls %}<video controls preload="none" src="{{ src }}" class="mt-3 w-full rounded-xl"></video>{% endfor %}
         {% for src in item.audio_urls %}<audio controls preload="none" src="{{ src }}" class="mt-3 w-full"></audio>{% endfor %}
-        {% if item.notes %}<p class="mt-3 whitespace-pre-line text-sm text-slate-500">{{ item.notes }}</p>{% endif %}
+        {% if item.notes and not group.sketch %}<p class="mt-3 whitespace-pre-line text-sm text-slate-500">{{ item.notes }}</p>{% endif %}
       </article>
       {% endfor %}
     </div>
+    {% if group.sketch %}
+    {% set notes = [] %}
+    {% for item in items %}{% if item.notes %}{% set notes = (notes.push({ label: item.title, note: item.notes }), notes) %}{% endif %}{% endfor %}
+    {{ teacherNotesBlock(notes) }}
+    {% endif %}
   {% endcall %}
   {% endif %}
   {% endif %}{% endfor %}
