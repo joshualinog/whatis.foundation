@@ -78,6 +78,18 @@
   .base-prose h3 {
     @apply mt-6 font-semibold text-slate-900;
   }
+  .base-prose h1 {
+    @apply text-2xl;
+  }
+  .base-prose h2 {
+    @apply text-xl;
+  }
+  .base-prose h3 {
+    @apply text-lg;
+  }
+  .base-prose h4 {
+    @apply mt-4 font-semibold text-slate-900;
+  }
   .base-prose a {
     @apply text-brand-700 underline underline-offset-4;
   }
