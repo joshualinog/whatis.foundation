@@ -31,18 +31,6 @@
         "leb": "And we have known and have believed the love that God has in us. God is love, and the one who resides in love resides in God, and God resides in him.",
         "original": "Καὶ ἡμεῖς ἐγνώκαμεν καὶ πεπιστεύκαμεν τὴν ἀγάπην ἣν ἔχει ὁ θεὸς ἐν ἡμῖν. ὁ θεὸς ἀγάπη ἐστίν, καὶ ὁ μένων ἐν τῇ ἀγάπῃ ἐν τῷ θεῷ μένει καὶ ὁ θεὸς ἐν αὐτῷ μένει."
       }
-    },
-    {
-      "ref": "2 Corinthians 13:11-13",
-      "essential": true,
-      "order": 3,
-      "teacher_notes": [],
-      "text": "",
-      "versions": {
-        "nirv": "Finally, brothers and sisters, rejoice! Strive for full restoration, encourage one another, be of one mind, live in peace. And the God of love and peace will be with you. Greet one another with a holy kiss. All God’s people here send their greetings. May the grace of the Lord Jesus Christ, and the love of God, and the fellowship of the Holy Spirit be with you all.",
-        "leb": "Finally, brothers, rejoice, be restored, be encouraged, agree with one another, live in peace, and the God of love and peace will be with you. Greet one another with a holy kiss. All the saints greet you. The grace of the Lord Jesus Christ and the love of God and the fellowship of the Holy Spirit be with all of you.",
-        "original": "Λοιπόν, ἀδελφοί, χαίρετε, καταρτίζεσθε, παρακαλεῖσθε, τὸ αὐτὸ φρονεῖτε, εἰρηνεύετε, καὶ ὁ θεὸς τῆς ἀγάπης καὶ εἰρήνης ἔσται μεθ' ὑμῶν. Ἀσπάσασhe ἀλλήλους ἐν ἁγίῳ φιλήματι. ἀσπάζονται ὑμᾶς οἱ ἅγιοι πάντες. Ἡ χάρις τοῦ κυρίου Ἰησοῦ Χριστοῦ καὶ ἡ ἀγάπη τοῦ θεοῦ καὶ ἡ κοινωνία τοῦ ἁγίου πνεύματος μετὰ πάντων ὑμῶν."
-      }
     }
   ],
   "outline_chain": [],
@@ -63,6 +51,6 @@
   "issue": {
     "number": 85,
     "url": "https://github.com/joshualinog/whatis.foundation/issues/85",
-    "updated_at": "2026-10-14T11:58:14Z"
+    "updated_at": "2026-10-14T12:08:03Z"
   }
 }
