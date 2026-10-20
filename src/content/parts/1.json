@@ -12,12 +12,20 @@
   "homeschooling_supporting_content": [],
   "board_game_content": [],
   "childrens_content": [],
-  "part_sketch": [],
+  "part_sketch": [
+    {
+      "title": "Part sketch",
+      "image_urls": [],
+      "video_urls": [],
+      "audio_urls": [],
+      "text": "* where should I introduce \"shaping\", hepta-shaping as part of being in the outline-chain?\n * I'm pretty sure the appropriate way to introduce shaping is in base 3 as a follow up and extension of being. It may be helpful to connect being to choosing a shape; ie. being is shaping, choosing to configure into a shape"
+    }
+  ],
   "part_body": "",
   "type": "part",
   "issue": {
     "number": 77,
     "url": "https://github.com/joshualinog/whatis.foundation/issues/77",
-    "updated_at": "2026-10-04T20:02:55Z"
+    "updated_at": "2026-10-20T10:53:48Z"
   }
 }
