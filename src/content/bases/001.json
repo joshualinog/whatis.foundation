@@ -273,12 +273,20 @@
   "homeschooling_supporting_content": [],
   "board_game_content": [],
   "childrens_content": [],
-  "base_sketch": [],
+  "base_sketch": [
+    {
+      "title": "Base sketch",
+      "image_urls": [],
+      "video_urls": [],
+      "audio_urls": [],
+      "text": "BI GOD IS LIGHT, LIGHT IS LOVE, BEING LIGHT\n * THE LIGHTS AND THEIR COURSES: the racers & their racetrack; staring at the sun\n * BAPTISM = the sun and baptism / the course of love, the course of increasing being of the other by joining to the other and sharing being\n * THE SUN, THE GLORY : (soul?) / glory?"
+    }
+  ],
   "base_body": "",
   "type": "base",
   "issue": {
     "number": 83,
     "url": "https://github.com/joshualinog/whatis.foundation/issues/83",
-    "updated_at": "2026-10-11T19:58:02Z"
+    "updated_at": "2026-10-20T10:50:41Z"
   }
 }
