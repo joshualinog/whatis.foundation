@@ -45,6 +45,9 @@ labels: ["FOUNDATION COURSE COMPONENT", "FOUNDATION PART"]
 <!-- block:part_sketch -->
 <!-- /block:part_sketch -->
 
+<!-- block:questions -->
+<!-- /block:questions -->
+
 <!-- block:part-body -->
 <!-- /block:part-body -->
 

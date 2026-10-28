@@ -44,6 +44,9 @@ labels: ["FOUNDATION COURSE COMPONENT", "FOUNDATION COURSE OVERVIEW"]
 <!-- block:overview_sketch -->
 <!-- /block:overview_sketch -->
 
+<!-- block:questions -->
+<!-- /block:questions -->
+
 <!-- block:overview-body -->
 <!-- /block:overview-body -->
 

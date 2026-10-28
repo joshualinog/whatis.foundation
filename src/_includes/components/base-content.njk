@@ -21,6 +21,7 @@
   {% call prop('catechesis', 'Mishnah catechesis') %}{{ p.catechesis(doc, 'bare') }}{% endcall %}
   {% call prop('hand-gistures', 'Hand gistures') %}{{ p.handGistures(doc, 'bare') }}{% endcall %}
   {% call prop('base-sketch', 'Base sketch') %}{{ p.resources(doc, ['base_sketch'], 'bare') }}{% endcall %}
+  {% call prop('questions', 'Pedagogical questions') %}{{ p.questions(doc, 'bare') }}{% endcall %}
   {% call prop('scripture-teacher-notes', 'Scripture list: teacher notes') %}{{ p.scriptureTeacherNotes(doc) }}{% endcall %}
 </section>
 

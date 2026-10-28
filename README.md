@@ -117,7 +117,7 @@ On the base page the essential scriptures form a numbered speech-bubble list and
 | `meta:part` / `meta:division` | `title number short_description long_description google_docs_url google_slides_url` |
 | `meta:overview` | `title short_description long_description google_docs_url google_slides_url` |
 
-`number` may be left out when the issue title starts with `Base <n>`, `Part <n>` or `Division <n>`. `title` defaults to the canonical title; a base's `part_parent` defaults to the part its number belongs to; Parts, divisions and the overview accept only the blocks `images`, `videos`, `scripture_list`, `youtube`, `podcast`, the four resource blocks and their own sketch block (`part_sketch`, `division_sketch`, `overview_sketch` — the equivalent of `base_sketch`); any other block is ignored with a warning.
+`number` may be left out when the issue title starts with `Base <n>`, `Part <n>` or `Division <n>`. `title` defaults to the canonical title; a base's `part_parent` defaults to the part its number belongs to; Parts, divisions and the overview accept only the blocks `images`, `videos`, `scripture_list`, `youtube`, `podcast`, `questions`, the four resource blocks and their own sketch block (`part_sketch`, `division_sketch`, `overview_sketch` — the equivalent of `base_sketch`); any other block is ignored with a warning.
 
 **Blocks → item attributes (the body maps to the field in brackets):**
 
@@ -131,6 +131,7 @@ On the base page the essential scriptures form a numbered speech-bubble list and
 | `practices` | `item:practice` `name` [`description`], followed by `item:step` `number image images` [`instructions`] |
 | `mind_movies` | `order track_urls notes` [`text`] |
 | `mishnah_catechesis` | `order hand_gisture question notes` [`answer`] |
+| `questions` | `order question` [`answer`] — Socratic: a blank answer shows "No answer yet", and the answer itself may be a further question |
 | `hand_gistures` | `item:hand_gisture` `name` [`description`], followed by `item:step` `image` [`text`] |
 | `block_talk_content` `homeschooling_supporting_content` `board_game_content` `childrens_content` `base_sketch` / `part_sketch` / `division_sketch` / `overview_sketch` | `title order url image_urls video_urls audio_urls notes` [`text`] |
 

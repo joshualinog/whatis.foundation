@@ -47,6 +47,9 @@ labels: ["FOUNDATION COURSE COMPONENT", "FOUNDATION BASE"]
 <!-- block:hand_gistures -->
 <!-- /block:hand_gistures -->
 
+<!-- block:questions -->
+<!-- /block:questions -->
+
 <!-- block:youtube -->
 <!-- /block:youtube -->
 

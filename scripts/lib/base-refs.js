@@ -18,6 +18,7 @@ const TYPES = {
   mind_movies: { field: 'mind_movies', keys: [] },
   mishnah_catechesis: { field: 'mishnah_catechesis', keys: ['question', 'hand_gisture'] },
   hand_gistures: { field: 'hand_gistures', keys: ['name'] },
+  questions: { field: 'questions', keys: ['question'] },
   youtube: { field: 'youtube', keys: ['alt', 'src'] },
   podcast: { field: 'podcast', keys: ['alt', 'src'] },
   block_talk_content: { field: 'block_talk_content', keys: ['title'] },
@@ -38,6 +39,7 @@ const SINGULAR = {
   mishnah: 'mishnah_catechesis',
   catechesis: 'mishnah_catechesis',
   hand_gisture: 'hand_gistures',
+  question: 'questions',
 };
 
 const norm = s => String(s).trim().toLowerCase();

@@ -136,6 +136,14 @@ const MishnahCatechesisSchema = z.object({
   notes: z.string().optional(),
 });
 
+// A Socratic pedagogical question; `answer` may itself be a further question
+// (or series of questions) rather than a statement. Blank until answered.
+const QuestionSchema = z.object({
+  order: z.number().default(1),
+  question: z.string(),
+  answer: z.string().default(''),
+});
+
 const HandGistureSchema = z.object({
   name: z.string(),
   description: z.string().default(''),
@@ -166,6 +174,7 @@ const containerArrays = type => ({
   board_game_content: resources(),
   childrens_content: resources(),
   [`${type}_sketch`]: resources(),
+  questions: z.array(QuestionSchema).default([]),
 });
 
 const contentArrays = {
@@ -179,6 +188,7 @@ const contentArrays = {
   mind_movies: z.array(MindMovieSchema).default([]),
   mishnah_catechesis: z.array(MishnahCatechesisSchema).default([]),
   hand_gistures: z.array(HandGistureSchema).default([]),
+  questions: z.array(QuestionSchema).default([]),
 
   youtube: z.array(SimpleMediaSchema).default([]),
   podcast: z.array(SimpleMediaSchema).default([]),

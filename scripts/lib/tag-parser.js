@@ -385,13 +385,14 @@ const MAPPERS = {
   mind_movies: item => withText(pick(item.attrs, ['order', 'track_urls', 'notes']), 'text', item),
   mishnah_catechesis: item =>
     withText(pick(item.attrs, ['order', 'hand_gisture', 'question', 'notes']), 'answer', item),
+  questions: item => withText(pick(item.attrs, ['order', 'question']), 'answer', item),
 };
 RESOURCE_BLOCKS.forEach(name => {
   MAPPERS[name] = item =>
     withText(pick(item.attrs, ['title', 'order', 'url', 'image_urls', 'video_urls', 'audio_urls', 'notes']), 'text', item);
 });
 
-const ORDERED_BLOCKS = new Set(['mind_movies', 'mishnah_catechesis', ...RESOURCE_BLOCKS]);
+const ORDERED_BLOCKS = new Set(['mind_movies', 'mishnah_catechesis', 'questions', ...RESOURCE_BLOCKS]);
 
 // ── scriptures ───────────────────────────────────────────────────────────────
 // A scripture's body is its direct translation (`text`). Inside it may sit

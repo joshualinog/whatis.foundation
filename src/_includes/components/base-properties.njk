@@ -233,6 +233,27 @@
 {% endif %}
 {% endmacro %}
 
+{# Pedagogical questions, Socratic in spirit: an answer may itself be a further question. #}
+{% macro questions(doc, sub=false) %}
+{% if doc.questions.length %}
+{% call section('questions', 'Pedagogical questions', sub) %}
+  <dl class="divide-y divide-slate-200">
+    {% for q in doc.questions %}
+    <div class="py-4 first:pt-0 last:pb-0">
+      <details class="group">
+        <summary class="flex cursor-pointer list-none items-start justify-between gap-6 text-left [&::-webkit-details-marker]:hidden">
+          <span class="font-semibold leading-7 text-slate-900">{{ q.question }}</span>
+          <span class="mt-1">{{ sl.chevron() }}</span>
+        </summary>
+        <dd class="mt-2 whitespace-pre-line pr-8 leading-7 text-slate-600">{{ q.answer or 'No answer yet.' }}</dd>
+      </details>
+    </div>
+    {% endfor %}
+  </dl>
+{% endcall %}
+{% endif %}
+{% endmacro %}
+
 {% macro mindMovies(doc, sub=false) %}
 {% if doc.mind_movies.length %}
 {% call section('mind-movies', 'Mind movies', sub) %}

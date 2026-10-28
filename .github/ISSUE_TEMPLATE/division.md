@@ -45,6 +45,9 @@ labels: ["FOUNDATION COURSE COMPONENT", "FOUNDATION DIVISION"]
 <!-- block:division_sketch -->
 <!-- /block:division_sketch -->
 
+<!-- block:questions -->
+<!-- /block:questions -->
+
 <!-- block:division-body -->
 <!-- /block:division-body -->
 
