@@ -21,12 +21,18 @@
       "text": "* where should I introduce \"shaping\", hepta-shaping as part of being in the outline-chain?\n * I'm pretty sure the appropriate way to introduce shaping is in base 3 as a follow up and extension of being. It may be helpful to connect being to choosing a shape; ie. being is shaping, choosing to configure into a shape"
     }
   ],
-  "questions": [],
+  "questions": [
+    {
+      "order": 1,
+      "question": "Should I introduce atonement in PART 1?",
+      "answer": "Shouldn't introduce atonement in PART 1, because PART 1 is essentially the 'GOD IS LOVE' section? The synonymization of atonement with love in 1 John 4:10 seems to require at least the introduction of the concept _ term ATONEMENT, doesn't it?"
+    }
+  ],
   "part_body": "",
   "type": "part",
   "issue": {
     "number": 77,
     "url": "https://github.com/joshualinog/whatis.foundation/issues/77",
-    "updated_at": "2026-10-20T10:53:48Z"
+    "updated_at": "2026-10-28T18:46:56Z"
   }
 }
