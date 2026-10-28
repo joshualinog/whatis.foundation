@@ -25,6 +25,11 @@
       "order": 1,
       "question": "Where will I teach the 2 Yahwehs concept?",
       "answer": "Will I teach it in PART 2, the prism phase?\n\nWill I teach it after PART 3, the 10 words? Will I teach it during PART 3? Multiple times in PART 3?"
+    },
+    {
+      "order": 2,
+      "question": "How do I teach atonement BEFORE I teach, harm/evil, death, & curse in PART 2, BASE 9?",
+      "answer": ""
     }
   ],
   "overview_body": "",
@@ -32,6 +37,6 @@
   "issue": {
     "number": 76,
     "url": "https://github.com/joshualinog/whatis.foundation/issues/76",
-    "updated_at": "2026-10-28T18:29:11Z"
+    "updated_at": "2026-10-28T18:48:56Z"
   }
 }
