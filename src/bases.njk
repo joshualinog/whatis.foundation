@@ -35,27 +35,6 @@ eleventyComputed:
     {% if next %}<a href="{{ next.url }}" rel="next" class="rounded-2xl border border-slate-200 bg-white p-4 text-right transition hover:border-brand-300 sm:col-start-2"><span class="text-xs uppercase tracking-[0.25em] text-slate-400">Base {{ next.number }} →</span><span class="mt-1 block font-semibold text-slate-900">{{ next.headline }}</span></a>{% endif %}
   </nav>
 
-  <section aria-labelledby="comments-heading" class="mt-16">
-    <h2 id="comments-heading" class="mb-4 text-2xl font-semibold text-slate-900">Comments</h2>
-    {% if site.giscus.repoId and site.giscus.categoryId %}
-    <script src="https://giscus.app/client.js"
-      data-repo="{{ site.giscus.repo }}"
-      data-repo-id="{{ site.giscus.repoId }}"
-      data-category="{{ site.giscus.category }}"
-      data-category-id="{{ site.giscus.categoryId }}"
-      data-mapping="pathname"
-      data-strict="0"
-      data-reactions-enabled="1"
-      data-emit-metadata="0"
-      data-input-position="top"
-      data-theme="light"
-      data-lang="en"
-      data-loading="lazy"
-      crossorigin="anonymous"
-      async></script>
-    {% else %}
-    <p class="rounded-2xl border border-dashed border-slate-300 bg-white p-6 text-slate-500">Comments are not configured yet. Set the GISCUS_REPO_ID and GISCUS_CATEGORY_ID build variables to enable them.</p>
-    {% endif %}
-  </section>
+  {% include "components/comments.njk" %}
 
 </article>
