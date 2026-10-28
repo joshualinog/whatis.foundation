@@ -385,14 +385,40 @@ const MAPPERS = {
   mind_movies: item => withText(pick(item.attrs, ['order', 'track_urls', 'notes']), 'text', item),
   mishnah_catechesis: item =>
     withText(pick(item.attrs, ['order', 'hand_gisture', 'question', 'notes']), 'answer', item),
-  questions: item => withText(pick(item.attrs, ['order', 'question']), 'answer', item),
 };
 RESOURCE_BLOCKS.forEach(name => {
   MAPPERS[name] = item =>
     withText(pick(item.attrs, ['title', 'order', 'url', 'image_urls', 'video_urls', 'audio_urls', 'notes']), 'text', item);
 });
 
-const ORDERED_BLOCKS = new Set(['mind_movies', 'mishnah_catechesis', 'questions', ...RESOURCE_BLOCKS]);
+const ORDERED_BLOCKS = new Set(['mind_movies', 'mishnah_catechesis', ...RESOURCE_BLOCKS]);
+
+// A pedagogical question, Socratic in spirit: the question is the item's own
+// body text (an explicit question="…" attribute still works and wins over
+// it); a nested `item:answer` supplies the answer — write none for "no
+// answer yet", or several to join them as paragraphs (an answer may itself
+// be a further question).
+function buildQuestions(items, warnings) {
+  return items.map(item => {
+    const raw = pick(item.attrs, ['order']);
+    const hasQuestionAttr = item.attrs.question !== undefined;
+    raw.question = hasQuestionAttr ? item.attrs.question : item.body;
+    const answers = item.attrs.answer !== undefined ? [item.attrs.answer] : [];
+    (item.children || []).forEach(child => {
+      if (/^answers?$/i.test(child.alias)) {
+        const text = child.body || child.attrs.answer || child.attrs.text;
+        if (text) answers.push(text);
+      } else {
+        warnings.push(`item:${child.alias} inside a question is not used (use item:answer)`);
+      }
+    });
+    // question="…" is the old convention, where the item's own body (not a
+    // nested item:answer) was the answer; keep that working.
+    if (hasQuestionAttr && !answers.length && item.body) answers.push(item.body);
+    if (answers.length) raw.answer = answers.join('\n\n');
+    return raw;
+  });
+}
 
 // ── scriptures ───────────────────────────────────────────────────────────────
 // A scripture's body is its direct translation (`text`). Inside it may sit
@@ -586,6 +612,10 @@ function parseDocText(text, options = {}) {
     }
     if (name === 'scripture_list') {
       raw[name] = sortByOrder(buildScriptures(items, warnings));
+      return;
+    }
+    if (name === 'questions') {
+      raw[name] = sortByOrder(buildQuestions(items, warnings));
       return;
     }
     const merged = upsertByOrder(items);

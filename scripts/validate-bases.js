@@ -169,6 +169,32 @@ Definition.
   assert.deepStrictEqual(doc.concept_lexicon[0].references, ['Base 02', 'Base 05']);
   assert.strictEqual(doc.concept_lexicon[0].definition, 'Definition.');
 });
+check('pedagogical questions: nested answers, no answer, and the legacy attribute form', () => {
+  const { doc, errors, warnings } = parse('Base 2', `<!-- block:questions -->
+<!-- item:question -->
+Where will I teach the 2 Yahwehs concept?
+<!-- item:answer -->
+In PART 2, the prism phase?
+<!-- /item:answer -->
+<!-- item:answer -->
+Or after PART 3, the 10 words?
+<!-- /item:answer -->
+<!-- /item:question -->
+<!-- item:question -->
+No answer yet, just a question.
+<!-- /item:question -->
+<!-- item:question order="3" question="Legacy attribute style?" -->
+Legacy answer as body.
+<!-- /item:question -->
+<!-- /block:questions -->`);
+  assert(doc, errors.join('; '));
+  assert.deepStrictEqual(warnings, []);
+  assert.deepStrictEqual(doc.questions, [
+    { order: 3, question: 'Legacy attribute style?', answer: 'Legacy answer as body.' },
+    { order: 1, question: 'Where will I teach the 2 Yahwehs concept?', answer: 'In PART 2, the prism phase?\n\nOr after PART 3, the 10 words?' },
+    { order: 1, question: 'No answer yet, just a question.', answer: '' },
+  ]);
+});
 check('meta:part with a part-body block', () => {
   const { doc, errors, warnings } = parse('Part 5', `<!-- meta:part number="5" -->
 <!-- block:part-body -->

@@ -131,9 +131,27 @@ On the base page the essential scriptures form a numbered speech-bubble list and
 | `practices` | `item:practice` `name` [`description`], followed by `item:step` `number image images` [`instructions`] |
 | `mind_movies` | `order track_urls notes` [`text`] |
 | `mishnah_catechesis` | `order hand_gisture question notes` [`answer`] |
-| `questions` | `order question` [`answer`] — Socratic: a blank answer shows "No answer yet", and the answer itself may be a further question |
+| `questions` | `order` [`question`], with an optional nested `item:answer` (repeatable) [`answer`] — Socratic: no answer shows "No answer yet", several answers join as paragraphs, and an answer may itself be a further question |
 | `hand_gistures` | `item:hand_gisture` `name` [`description`], followed by `item:step` `image` [`text`] |
 | `block_talk_content` `homeschooling_supporting_content` `board_game_content` `childrens_content` `base_sketch` / `part_sketch` / `division_sketch` / `overview_sketch` | `title order url image_urls video_urls audio_urls notes` [`text`] |
+
+**Pedagogical questions.** Write the question as the item's own body; nest `item:answer` for the answer, repeated if you want it in several paragraphs, or left out for "No answer yet":
+
+```html
+<!-- block:questions -->
+<!-- item:question -->
+Where will I teach the 2 Yahwehs concept?
+<!-- item:answer -->
+Will I teach it in PART 2, the prism phase?
+<!-- /item:answer -->
+<!-- item:answer -->
+Will I teach it after PART 3, the 10 words?
+<!-- /item:answer -->
+<!-- /item:question -->
+<!-- /block:questions -->
+```
+
+`question="…"` still works as an attribute instead — the item's body is then the answer, as in the other blocks.
 
 **Non-linear drafting.** Items in the same block with the same explicit `order` are merged: bodies are joined, list attributes appended, other attributes keep the first value. Items without `order` keep writing order. Outline links and sublinks without `order` are numbered by position.
 
