@@ -21,6 +21,18 @@
       }
     },
     {
+      "ref": "Matthew 5:43-48",
+      "essential": true,
+      "order": 1.1,
+      "teacher_notes": [],
+      "text": "",
+      "versions": {
+        "nirv": "“You have heard that it was said, ‘Love your neighbor and hate your enemy.’ But I tell you, love your enemies and pray for those who mistreat you. Then you will be children of your Father in heaven. He causes his sun to rise on the evil and the good, and sends rain on the righteous and the unrighteous. If you love only those who love you, what reward will you get? Even the tax collectors do that. And if you greet only your own people, what are you doing more than others? Even people who do not know God do that. Be perfect, therefore, as your heavenly Father is perfect.”",
+        "leb": "“You have heard that it was said, ‘You shall love your neighbor and hate your enemy.’ But I say to you, love your enemies and pray for those who persecute you, so that you may be sons of your Father who is in heaven, because he causes his sun to rise on the evil and the good and sends rain on the righteous and the unrighteous. For if you love those who love you, what reward do you have? Do not even the tax collectors do the same? And if you greet only your brothers, what more are you doing than others? Do not even the Gentiles do the same? Therefore you shall be perfect, as your heavenly Father is perfect.”",
+        "original": "Ἠκούσατε ὅτι ἐρρέθη, Ἀγαπήσεις τὸν πλησίον σου καὶ μισήσεις τὸν ἐχθρόν σου. Ἐγὼ δὲ λέγω ὑμῖν, ἀγαπᾶτε τοὺς ἐχθροὺς ὑμῶν καὶ προσεύχεσθε ὑπὲρ τῶν διωκόντων ὑμᾶς, ὅπως γένησθε υἱοὶ τοῦ πατρὸς ὑμῶν τοῦ ἐν οὐρανοῖς, ὅτι τὸν ἥλιον αὐτοῦ ἀνατέλλει ἐπὶ πονηροὺς καὶ ἀγαθοὺς καὶ βρέχει ἐπὶ δικαίους καὶ ἀδίκους. Ἐὰν γὰρ ἀγαπήσητε τοὺς ἀγαπῶντας ὑμᾶς, τίνα μισθὸν ἔχετε; οὐχὶ καὶ οἱ τελῶναι τὸ αὐτὸ ποιοῦσιν; Καὶ ἐὰν ἀσπάσησθε τοὺς ἀδελφοὺς ὑμῶν μόνον, τί περισσὸν ποιεῖτε; οὐχὶ καὶ οἱ ἐθνικοὶ τὸ αὐτὸ ποιοῦσιν; Ἔσεσθε οὖν ὑμεῖς τέλειοι, ὥσπερ ὁ πατὴρ ὑμῶν ὁ οὐράνιος τέλειός ἐστιν."
+      }
+    },
+    {
       "ref": "Psalm 19.1-14",
       "essential": true,
       "order": 2,
@@ -261,18 +273,6 @@
       }
     },
     {
-      "ref": "Matthew 5:43-48",
-      "essential": true,
-      "order": 22,
-      "teacher_notes": [],
-      "text": "",
-      "versions": {
-        "nirv": "“You have heard that it was said, ‘Love your neighbor and hate your enemy.’ But I tell you, love your enemies and pray for those who mistreat you. Then you will be children of your Father in heaven. He causes his sun to rise on the evil and the good, and sends rain on the righteous and the unrighteous. If you love only those who love you, what reward will you get? Even the tax collectors do that. And if you greet only your own people, what are you doing more than others? Even people who do not know God do that. Be perfect, therefore, as your heavenly Father is perfect.”",
-        "leb": "“You have heard that it was said, ‘You shall love your neighbor and hate your enemy.’ But I say to you, love your enemies and pray for those who persecute you, so that you may be sons of your Father who is in heaven, because he causes his sun to rise on the evil and the good and sends rain on the righteous and the unrighteous. For if you love those who love you, what reward do you have? Do not even the tax collectors do the same? And if you greet only your brothers, what more are you doing than others? Do not even the Gentiles do the same? Therefore you shall be perfect, as your heavenly Father is perfect.”",
-        "original": "Ἠκούσατε ὅτι ἐρρέθη, Ἀγαπήσεις τὸν πλησίον σου καὶ μισήσεις τὸν ἐχθρόν σου. Ἐγὼ δὲ λέγω ὑμῖν, ἀγαπᾶτε τοὺς ἐχθροὺς ὑμῶν καὶ προσεύχεσθε ὑπὲρ τῶν διωκόντων ὑμᾶς, ὅπως γένησθε υἱοὶ τοῦ πατρὸς ὑμῶν τοῦ ἐν οὐρανοῖς, ὅτι τὸν ἥλιον αὐτοῦ ἀνατέλλει ἐπὶ πονηροὺς καὶ ἀγαθοὺς καὶ βρέχει ἐπὶ δικαίους καὶ ἀδίκους. Ἐὰν γὰρ ἀγαπήσητε τοὺς ἀγαπῶντας ὑμᾶς, τίνα μισθὸν ἔχετε; οὐχὶ καὶ οἱ τελῶναι τὸ αὐτὸ ποιοῦσιν; Καὶ ἐὰν ἀσπάσησθε τοὺς ἀδελφοὺς ὑμῶν μόνον, τί περισσὸν ποιεῖτε; οὐχὶ καὶ οἱ ἐθνικοὶ τὸ αὐτὸ ποιοῦσιν; Ἔσεσθε οὖν ὑμεῖς τέλειοι, ὥσπερ ὁ πατὴρ ὑμῶν ὁ οὐράνιος τέλειός ἐστιν."
-      }
-    },
-    {
       "ref": "Exodus 23:4-5",
       "essential": true,
       "order": 23,
@@ -324,6 +324,6 @@
   "issue": {
     "number": 83,
     "url": "https://github.com/joshualinog/whatis.foundation/issues/83",
-    "updated_at": "2026-11-01T03:26:31Z"
+    "updated_at": "2026-11-01T03:39:26Z"
   }
 }
