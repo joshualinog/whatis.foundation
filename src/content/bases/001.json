@@ -259,6 +259,42 @@
         "leb": "\"Arise, shine, for your light has come, and the glory of Yahweh has dawned upon you. For look, darkness covers the earth, and thick darkness the peoples, but Yahweh will dawn upon you, and his glory will appear over you. And nations will walk by your light, and kings by the brightness of your dawning. Lift up your eyes round about and see: they all gather; they come to you; your sons will come from far away, and your daughters will be carried on the hip.\"",
         "original": "קוּמִי אֹורִי כִּי בָא אֹורֵךְ וּכְבֹוד יְהוָה עָלַיִךְ זָרָח׃ כִּי־הִנֵּה הַחֹשֶׁךְ יְכַסֶּה־אֶרֶץ וַעֲרָפֶ لְאֻמִּים וְעָלַיִךְ יִזְרַח יְהוָה וּכְבֹודֹו עָלַיִךְ יֵרָאֶה׃ וְהָלְכוּ גֹויִם לְאֹורֵךְ וּמְלָכִים לְנֹגַהּ זַרְחֵךְ׃ שְׂئִי־סָבִיב עיניך וְרְאִי כֻּלָּם נִקְبְּצוּ בָאוּ־לָךְ בָּנַיִךְ מֵרָחוֹק יָבֹאוּ וּבְנֹתַיִךְ עַל־צַד תָּאָמַנְהָ׃"
       }
+    },
+    {
+      "ref": "Matthew 5:43-48",
+      "essential": true,
+      "order": 22,
+      "teacher_notes": [],
+      "text": "",
+      "versions": {
+        "nirv": "“You have heard that it was said, ‘Love your neighbor and hate your enemy.’ But I tell you, love your enemies and pray for those who mistreat you. Then you will be children of your Father in heaven. He causes his sun to rise on the evil and the good, and sends rain on the righteous and the unrighteous. If you love only those who love you, what reward will you get? Even the tax collectors do that. And if you greet only your own people, what are you doing more than others? Even people who do not know God do that. Be perfect, therefore, as your heavenly Father is perfect.”",
+        "leb": "“You have heard that it was said, ‘You shall love your neighbor and hate your enemy.’ But I say to you, love your enemies and pray for those who persecute you, so that you may be sons of your Father who is in heaven, because he causes his sun to rise on the evil and the good and sends rain on the righteous and the unrighteous. For if you love those who love you, what reward do you have? Do not even the tax collectors do the same? And if you greet only your brothers, what more are you doing than others? Do not even the Gentiles do the same? Therefore you shall be perfect, as your heavenly Father is perfect.”",
+        "original": "Ἠκούσατε ὅτι ἐρρέθη, Ἀγαπήσεις τὸν πλησίον σου καὶ μισήσεις τὸν ἐχθρόν σου. Ἐγὼ δὲ λέγω ὑμῖν, ἀγαπᾶτε τοὺς ἐχθροὺς ὑμῶν καὶ προσεύχεσθε ὑπὲρ τῶν διωκόντων ὑμᾶς, ὅπως γένησθε υἱοὶ τοῦ πατρὸς ὑμῶν τοῦ ἐν οὐρανοῖς, ὅτι τὸν ἥλιον αὐτοῦ ἀνατέλλει ἐπὶ πονηροὺς καὶ ἀγαθοὺς καὶ βρέχει ἐπὶ δικαίους καὶ ἀδίκους. Ἐὰν γὰρ ἀγαπήσητε τοὺς ἀγαπῶντας ὑμᾶς, τίνα μισθὸν ἔχετε; οὐχὶ καὶ οἱ τελῶναι τὸ αὐτὸ ποιοῦσιν; Καὶ ἐὰν ἀσπάσησθε τοὺς ἀδελφοὺς ὑμῶν μόνον, τί περισσὸν ποιεῖτε; οὐχὶ καὶ οἱ ἐθνικοὶ τὸ αὐτὸ ποιοῦσιν; Ἔσεσθε οὖν ὑμεῖς τέλειοι, ὥσπερ ὁ πατὴρ ὑμῶν ὁ οὐράνιος τέλειός ἐστιν."
+      }
+    },
+    {
+      "ref": "Exodus 23:4-5",
+      "essential": true,
+      "order": 23,
+      "teacher_notes": [],
+      "text": "",
+      "versions": {
+        "nirv": "“If you come across your enemy’s ox or donkey wandering away, you must bring it back. If you see that the donkey of someone who hates you has fallen down under its load, do not leave it there. Be sure you help that person with it.”",
+        "leb": "“If you see your enemy’s ox or donkey wandering away, you shall bring it back. If you see the donkey of one who hates you lying under its burden, you shall refrain from leaving him with it; you shall rescue it with him.”",
+        "original": "כִּי־תִרְאֶה חֲמוֹר שֹׂנַאֲךָ רֹבֵץ תַּחַת מַשָּׂאוֹ וְחָדַלְתָּ מֵעֲזֹב לוֹ עָזֹב תַּעֲזֹב עִמּוֹ׃"
+      }
+    },
+    {
+      "ref": "Deuteronomy 22:1-4",
+      "essential": true,
+      "order": 24,
+      "teacher_notes": [],
+      "text": "",
+      "versions": {
+        "nirv": "“You must not see your brother’s donkey or ox fallen down along the road and ignore them. You must help him get it up again. You must not hide yourself from your fellow Israelites when they have fallen down. You must help them up.”",
+        "leb": "“You shall not see your brother’s donkey or ox fallen down by the road and ignore them; you shall certainly help him lift them up again. You shall not see your relative’s donkey or ox fallen down by the road and ignore them; you shall certainly help him lift them up again.”",
+        "original": "לֹא־תִרְאֶה אֶת־שׁוֹר אָחִיךָ אוֹ אֶת־שֵׂיוֹ נֹפֵל בַּדֶּרֶךְ וְהִתְעַלַמְתָּ מֵהֶם הָקֵם תָּקִים עִמּוֹ׃ לֹא־תִרְאֶה אֶת־חֲמוֹר אָחִיךָ אוֹ שׁוֹרוֹ נֹפֵל בַּדֶּרֶךְ וְהִתְעַלַמְתָּ מֵהֶם הָקֵם תָּקִים עִמּוֹ׃"
+      }
     }
   ],
   "outline_chain": [],
@@ -288,6 +324,6 @@
   "issue": {
     "number": 83,
     "url": "https://github.com/joshualinog/whatis.foundation/issues/83",
-    "updated_at": "2026-11-01T02:27:27Z"
+    "updated_at": "2026-11-01T03:26:10Z"
   }
 }
