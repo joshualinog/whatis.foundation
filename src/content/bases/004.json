@@ -31,6 +31,42 @@
         "leb": "And we have known and have believed the love that God has in us. God is love, and the one who resides in love resides in God, and God resides in him.",
         "original": "Καὶ ἡμεῖς ἐγνώκαμεν καὶ πεπιστεύκαμεν τὴν ἀγάπην ἣν ἔχει ὁ θεὸς ἐν ἡμῖν. ὁ θεὸς ἀγάπη ἐστίν, καὶ ὁ μένων ἐν τῇ ἀγάπῃ ἐν τῷ θεῷ μένει καὶ ὁ θεὸς ἐν αὐτῷ μένει."
       }
+    },
+    {
+      "ref": "Exodus 15:2",
+      "essential": true,
+      "order": 3,
+      "teacher_notes": [],
+      "text": "Yah is my strength and my song, and he has become my salvation.",
+      "versions": {
+        "nirv": "The Lord is my strength and my song. He has saved me.",
+        "leb": "Yah is my strength and my song, and he has become my salvation.",
+        "original": "עָזִּי וְזִמְרָת יָהּ וַיְהִי־לִי לִישׁוּעָה"
+      }
+    },
+    {
+      "ref": "Psalm 118:14",
+      "essential": true,
+      "order": 4,
+      "teacher_notes": [],
+      "text": "Yah is my strength and my song, and he has become my salvation.",
+      "versions": {
+        "nirv": "The Lord is my strength and my song. He has saved me.",
+        "leb": "Yah is my strength and my song, and he has become my salvation.",
+        "original": "עָזִּי וְזִמְרָת יָהּ וַיְהִי־לִי לִישׁוּעָה"
+      }
+    },
+    {
+      "ref": "Isaiah 12:2",
+      "essential": true,
+      "order": 5,
+      "teacher_notes": [],
+      "text": "God is my salvation. I will trust him and not be afraid, for Yah, the LORD, is my strength and my song, and he has become my salvation.",
+      "versions": {
+        "nirv": "God is my salvation. I will trust him and not be afraid. The Lord gives me strength and protects me. He is my God, and I will praise him. He is the God who saves me.",
+        "leb": "God is my salvation. I will trust him and not be afraid, for Yah, the LORD, is my strength and my song, and he has become my salvation.",
+        "original": "הִנֵּה אֵל יְשֻׁעָתִי אֶבְטַח וְלֹא אֶפְחָד כִּי־עָזִּי וְזִמְרָת יָהּ יְהוָה וַיְהִי־לִי לִישׁוּעָה"
+      }
     }
   ],
   "outline_chain": [],
@@ -52,6 +88,6 @@
   "issue": {
     "number": 85,
     "url": "https://github.com/joshualinog/whatis.foundation/issues/85",
-    "updated_at": "2026-10-18T14:02:57Z"
+    "updated_at": "2026-11-02T17:08:59Z"
   }
 }
